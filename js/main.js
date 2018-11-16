@@ -2,10 +2,10 @@
 
 //  MODULE {render-screens.js}
 
-const KeyCodes = {
+const KeyCode = {
   ESC: 27,
-  AR_LEFT: 37,
-  AR_RIGHT: 39,
+  ARROW_LEFT: 37,
+  ARROW_RIGHT: 39,
   ENTER: 13
 };
 
@@ -20,6 +20,8 @@ const screens = Array.from(document.querySelectorAll(`template`)).map((it) => {
   shadow.appendChild(content);
   return shadow.cloneNode(true);
 });
+
+const START_SCREEN = 2;
 
 let currentScreenNumber = 0;
 
@@ -76,10 +78,10 @@ const renderScreen = (number) => {
 
 const onDocumentKeydown = (evt) => {
   switch (evt.keyCode) {
-    case KeyCodes.AR_LEFT:
+    case KeyCode.ARROW_LEFT:
       renderPreviousScreen();
       break;
-    case KeyCodes.AR_RIGHT:
+    case KeyCode.ARROW_RIGHT:
       renderNextScreen();
       break;
   }
@@ -109,5 +111,5 @@ document.addEventListener(`keydown`, onDocumentKeydown);
 
 // execute code
 
-renderScreen(2);
+renderScreen(START_SCREEN);
 renderScreenNav();
