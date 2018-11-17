@@ -1,5 +1,3 @@
-'use strict';
-
 const del = require(`del`);
 const gulp = require(`gulp`);
 const sass = require(`gulp-sass`);
@@ -12,12 +10,14 @@ const minify = require(`gulp-csso`);
 const rename = require(`gulp-rename`);
 const imagemin = require(`gulp-imagemin`);
 const svgstore = require(`gulp-svgstore`);
+const rollup = require(`gulp-better-rollup`);
+const sourcemaps = require(`gulp-sourcemaps`);
 
 gulp.task(`style`, () => {
-  return gulp.src(`sass/style.scss`).
-    pipe(plumber()).
-    pipe(sass()).
-    pipe(postcss([
+  return gulp.src(`sass/style.scss`)
+    .pipe(plumber())
+    .pipe(sass())
+    .pipe(postcss([
       autoprefixer({
         browsers: [
           `last 1 version`,
@@ -28,12 +28,12 @@ gulp.task(`style`, () => {
         ]
       }),
       mqpacker({sort: true})
-    ])).
-    pipe(gulp.dest(`build/css`)).
-    pipe(server.stream()).
-    pipe(minify()).
-    pipe(rename(`style.min.css`)).
-    pipe(gulp.dest(`build/css`));
+    ]))
+    .pipe(gulp.dest(`build/css`))
+    .pipe(server.stream())
+    .pipe(minify())
+    .pipe(rename(`style.min.css`))
+    .pipe(gulp.dest(`build/css`));
 });
 
 gulp.task(`sprite`, () => {
@@ -46,32 +46,35 @@ gulp.task(`sprite`, () => {
 });
 
 gulp.task(`scripts`, () => {
-  return gulp.src(`js/**/*.js`).
-    pipe(plumber()).
-    pipe(gulp.dest(`build/js/`));
+  return gulp.src(`js/**/*.js`)
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(rollup({}, `iife`))
+    .pipe(sourcemaps.write(``))
+    .pipe(gulp.dest(`build/js/`));
 });
 
 gulp.task(`imagemin`, [`copy`], () => {
-  return gulp.src(`build/img/**/*.{jpg,png,gif}`).
-    pipe(imagemin([
+  return gulp.src(`build/img/**/*.{jpg,png,gif}`)
+    .pipe(imagemin([
       imagemin.optipng({optimizationLevel: 3}),
       imagemin.jpegtran({progressive: true})
-    ])).
-    pipe(gulp.dest(`build/img`));
+    ]))
+    .pipe(gulp.dest(`build/img`));
 });
 
 gulp.task(`copy-html`, () => {
-  return gulp.src(`*.{html,ico}`).
-    pipe(gulp.dest(`build`)).
-    pipe(server.stream());
+  return gulp.src(`*.{html,ico}`)
+    .pipe(gulp.dest(`build`))
+    .pipe(server.stream());
 });
 
 gulp.task(`copy`, [`copy-html`, `scripts`, `style`, `sprite`], () => {
   return gulp.src([
     `fonts/**/*.{woff,woff2}`,
     `img/*.*`
-  ], {base: `.`}).
-    pipe(gulp.dest(`build`));
+  ], {base: `.`})
+    .pipe(gulp.dest(`build`));
 });
 
 gulp.task(`clean`, () => {
