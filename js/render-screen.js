@@ -2,6 +2,7 @@ import insertHeader from './screen-header.js';
 
 const body = document.querySelector(`body`);
 let main = body.querySelector(`#main`);
+const mainId = main.id;
 
 // @param {template} screen node to render
 // @param {common} boolean, true if header is needed
@@ -9,9 +10,8 @@ let main = body.querySelector(`#main`);
 // $result adds pointed node to #main
 
 const renderScreen = (template, common, misc) => {
-
-  template.classList.add(`central`);
-  template.id = `main`;
+  main.id = ``;
+  template.id = mainId;
 
   if (common) {
     template.insertBefore(insertHeader(misc), template.firstChild);
