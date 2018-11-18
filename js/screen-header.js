@@ -25,41 +25,16 @@ const headerMiscMarkup = `
     </div>
 `;
 
-// @param {nodes} any object or nodelist to get nodes from
-// $return array of nodes from {nodes}
-
-const createNodeCollection = (nodes) => {
-  let count = 0;
-  const collection = [];
-
-  while (count < nodes.length) {
-    collection.push(nodes[count]);
-    count++;
-  }
-
-  return collection;
-};
-
 // @param {misc} boolean, true is header include misc info (life, timer, etc.)
 // $return header fragment
 
 const insertHeader = (misc) => {
   const fragment = document.createDocumentFragment();
 
-  let i = 0;
-
-  while (i < headerCommonCollection.length) {
-    fragment.appendChild(headerCommonCollection[i]);
-    i++;
-  }
+  fragment.append(...headerCommonCollection);
 
   if (misc) {
-    let j = 0;
-
-    while (j < headerMiscCollection.length) {
-      fragment.firstChild.appendChild(headerMiscCollection[j]);
-      j++;
-    }
+    fragment.firstChild.append(...headerMiscCollection);
   }
 
   return fragment;
@@ -70,10 +45,10 @@ const insertHeader = (misc) => {
 const headerCommon = createMarkupNode(headerCommonMarkup);
 const headerMisc = createMarkupNode(headerMiscMarkup);
 
-// collecting shared nodes into array
+// storing HTMLCollection
 
-const headerCommonCollection = createNodeCollection(headerCommon.children);
-const headerMiscCollection = createNodeCollection(headerMisc.children);
+const headerCommonCollection = [...headerCommon.children];
+const headerMiscCollection = [...headerMisc.children];
 
 // listener
 
