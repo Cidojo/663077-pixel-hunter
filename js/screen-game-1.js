@@ -1,7 +1,6 @@
 import createMarkupNode from './create-markup-node.js';
 import screenSecondGame from './screen-game-2.js';
 import renderScreen from './render-screen.js';
-import isAllAnswersRecieved from './game-mechanics.js';
 
 const screenFirstGameMarkup = `
   <section class="game">
@@ -45,6 +44,13 @@ const screenFirstGameMarkup = `
   </section>
 `;
 
+// @param {answersArray} nodelist of answers, consequence in pairs (like [photo, paint, photo, paint...])
+// $return boolean if all answers has been recieved
+
+const isAllAnswersRecieved = (answersArray) => {
+  return answersArray.length / 2 === answersArray.filter((it) => it.checked).length;
+};
+
 // creating game-1 node
 
 const screenFirstGame = createMarkupNode(screenFirstGameMarkup);
@@ -55,9 +61,11 @@ const answers = Array.from(screenFirstGame.querySelectorAll(`.game__answer input
 
 answers.forEach((it) => {
   it.addEventListener(`click`, () => {
+
     if (isAllAnswersRecieved(answers)) {
       renderScreen(screenSecondGame, true, true);
     }
+
   });
 });
 

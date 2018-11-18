@@ -1,7 +1,6 @@
 import createMarkupNode from './create-markup-node.js';
 import screenThirdGame from './screen-game-3.js';
 import renderScreen from './render-screen.js';
-import isAllAnswersRecieved from './game-mechanics.js';
 
 const screenSecondGameMarkup = `
   <section class="game">
@@ -44,9 +43,7 @@ const answers = Array.from(screenSecondGame.querySelectorAll(`.game__answer inpu
 
 answers.forEach((it) => {
   it.addEventListener(`click`, () => {
-    if (isAllAnswersRecieved(answers)) {
-      renderScreen(screenThirdGame, true, true);
-    }
+    renderScreen(screenThirdGame, true, true);
   });
 });
 
