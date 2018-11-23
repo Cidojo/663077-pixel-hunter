@@ -2,6 +2,7 @@ import insertHeader from './screen-header.js';
 
 const body = document.querySelector(`body`);
 let main = body.querySelector(`#main`);
+
 const mainId = main.id;
 
 // @param {template} screen node to render
