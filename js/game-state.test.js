@@ -4,7 +4,12 @@ const MAX_TIME_LIMIT = 10;
 const gameo = {
   time: 2,
   level: 5,
+  lives: 3,
   answers: new Array(3).fill({answer: `someAnswer`}),
+};
+
+const reapLife = (game) => {
+  return --game.lives;
 };
 
 const updateTime = (game) => {

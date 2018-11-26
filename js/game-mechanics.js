@@ -1,39 +1,40 @@
-const INIT_LIVES = 3;
-
 const GameRules = {
   LEVEL_QUANTITY: 10,
   CORRECT_BONUS: 100,
   QUICK_BONUS: 50,
   SLOW_BONUS: -50,
-  LIVES_BONUS: 50
+  LIVES_BONUS: 50,
+  MAX_TIME_LIMIT: 10,
+  INIT_LIVES: 3
 };
 
-const getScores = (arrayOfAnswerObjects, lives) => {
-  let scores = 0;
 
-  if (arrayOfAnswerObjects.length !== GameRules.LEVEL_QUANTITY) {
-    return -1;
-  }
+const INITIAL_GAME = Object.freeze({
+  level: 0,
+  lives: 3,
+  time: 0
+});
 
-  arrayOfAnswerObjects.forEach((it) => {
-    let bonus = 0;
+let newGame = Object.assign({}, INITIAL_GAME);
 
-    if (it.isCorrect) {
-      bonus += GameRules.CORRECT_BONUS;
-    } else if (it.isQuick) {
-      bonus += GameRules.QUICK_BONUS;
-    } else if (it.isSlow) {
-      bonus += GameRules.SLOW_BONUS;
+const reapLife = (game) => {
+  return --game.lives;
+};
+
+const updateTime = (game) => {
+  let current = GameRules.MAX_TIME_LIMIT;
+
+  let timeoutId = setTimeout(function tick() {
+    if (current > 0 && game.answers.length !== game.level) {
+      game.time = current--;
+      timeoutId = setTimeout(tick, 1000);
+    } else {
+      clearTimeout(timeoutId);
+      game.time = current;
     }
-
-    scores += bonus;
-  });
-
-  if (lives) {
-    scores += lives * GameRules.LIVES_BONUS;
-  }
-
-  return scores;
+  }, 1000);
 };
 
-export {getScores, GameRules, INIT_LIVES};
+
+
+export {getScores, GameRules};
