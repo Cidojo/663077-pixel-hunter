@@ -7,7 +7,7 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
   // corner cases
 
   it(`should return 1150 if all answers have been recieved not slowly and not quickly and all lives preserved`, () => {
-    let testCase = new Array(GameSetting.MAX_LEVEL).fill({
+    const testCase = new Array(GameSetting.MAX_LEVEL).fill({
       isCorrect: true,
       type: `NORMAL`
     });
@@ -16,7 +16,7 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
   });
 
   it(`should return 1650 if all answers have been recieved quickly and all lives preserved`, () => {
-    let testCase = new Array(GameSetting.MAX_LEVEL)
+    const testCase = new Array(GameSetting.MAX_LEVEL)
         .fill({
           isCorrect: true,
           type: `QUICK`
@@ -26,7 +26,7 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
   });
 
   it(`should return 350 if all answers have been recieved slowly and no lives preserved`, () => {
-    let testCase = new Array(GameSetting.MAX_LEVEL)
+    const testCase = new Array(GameSetting.MAX_LEVEL)
         .fill({
           isCorrect: true,
           type: `SLOW`
@@ -39,10 +39,14 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
     assert.equal(getScores(testCase, 0), 350);
   });
 
+  it(`should allow empty array as a parameter`, () => {
+    assert.equal(-1, getScores([], 0));
+  });
+
   // incorrect data
 
   it(`should return -1 if not all answers has been recieved (less than ${GameSetting.MAX_LEVEL})`, () => {
-    assert.equal(-1, getScores([], 0));
+    assert.equal(-1, getScores([{}, {}], 0));
   });
 
   it(`the lives must not exceed an interval from 0 to ${GameSetting.INITIAL_LIVES}`, () => {
@@ -52,7 +56,7 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
 
   // invalid data
 
-  it(`should throw an error if answers is not an array of objects`, () => {
+  it(`should throw an error if answers not empty, but is not an array of objects`, () => {
     assert.throws(() => getScores({}, 0), /the answers parameter should be array of objects/);
     assert.throws(() => getScores(null, 0), /the answers parameter should be array of objects/);
     assert.throws(() => getScores(undefined, 0), /the answers parameter should be array of objects/);
@@ -61,6 +65,7 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
 
   it(`should throw an error if lives is not a number`, () => {
     assert.throws(() => getScores([], `0`), /the lives parameter should be a number/);
+    assert.throws(() => getScores([], NaN), /the lives parameter should be a number/);
     assert.throws(() => getScores([], {}), /the lives parameter should be a number/);
     assert.throws(() => getScores([], []), /the lives parameter should be a number/);
     assert.throws(() => getScores([]), /the lives parameter should be a number/);

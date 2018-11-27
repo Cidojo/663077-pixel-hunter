@@ -1,11 +1,4 @@
-import {GameSetting, ScoreBonus} from './game-rules.js';
-
-const AnswerType = {
-  QUICK: `QUICK`,
-  SLOW: `SLOW`,
-  NORMAL: `NORMAL`,
-};
-
+import {GameSetting, ScoreBonus, AnswerType} from './game-rules.js';
 
 // @param {answers} array on answer objects
 // @param {livesAmount} amount of lives at the end of the game
@@ -16,7 +9,7 @@ const getScores = (answers, livesAmount) => {
     throw new Error(`the answers parameter should be array of objects`);
   }
 
-  if (typeof livesAmount !== `number`) {
+  if (typeof livesAmount !== `number` || isNaN(livesAmount)) {
     throw new Error(`the lives parameter should be a number`);
   }
 

@@ -11,7 +11,7 @@ const changeLevel = (state) => {
     throw new Error(`incorrect data, state object's level property should be in interval from 1 to ${GameSetting.MAX_LEVEL}`);
   }
 
-  let newLevel = state.level === GameSetting.MAX_LEVEL ? GameSetting.MAX_LEVEL : ++state.level;
+  const newLevel = state.level === GameSetting.MAX_LEVEL ? GameSetting.MAX_LEVEL : state.level + 1;
 
   return Object.assign({}, state, {level: newLevel});
 };
@@ -28,7 +28,7 @@ const reapLife = (state) => {
     throw new Error(`incorrect data, state object's lifeAmount property should not be less than 0`);
   }
 
-  let newAmount = state.lifeAmount === 0 ? 0 : --state.lifeAmount;
+  const newAmount = state.lifeAmount === 0 ? 0 : state.lifeAmount - 1;
 
   return Object.assign({}, state, {lifeAmount: newAmount});
 };
@@ -45,7 +45,7 @@ const updateTime = (state) => {
     throw new Error(`incorrect data, state object's time property should be in interval from 0 to ${GameSetting.TIME_LIMIT}`);
   }
 
-  let newTime = state.time === 0 ? 0 : --state.time;
+  const newTime = state.time === 0 ? 0 : state.time - 1;
 
   return Object.assign({}, state, {time: newTime});
 };

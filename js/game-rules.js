@@ -4,12 +4,19 @@ const GameSetting = {
   TIME_LIMIT: 30
 };
 
-const ScoreBonus = {
-  CORRECT: 100,
-  QUICK: 50,
-  SLOW: -50,
-  NORMAL: 0,
-  EXTRA_LIFE: 50
+const AnswerType = {
+  QUICK: `QUICK`,
+  SLOW: `SLOW`,
+  NORMAL: `NORMAL`,
 };
 
-export {GameSetting, ScoreBonus};
+const ScoreBonus = {
+  CORRECT: 100,
+  EXTRA_LIFE: 50,
+  [AnswerType.QUICK]: 50,
+  [AnswerType.SLOW]: -50,
+  [AnswerType.NORMAL]: 0
+};
+
+
+export {GameSetting, ScoreBonus, AnswerType};
