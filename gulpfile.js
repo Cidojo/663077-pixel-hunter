@@ -120,7 +120,7 @@ gulp.task(`test`, () => {
       plugins: [
         commonjs()
       ]}, `cjs`))
-    .pipe(gulp.dest(`build/test`))
+    .pipe(gulp.dest(`build`))
     .pipe(mocha({
       reporter: `spec`
     }));
