@@ -2,32 +2,79 @@ import createMarkupNode from './create-markup-node.js';
 import screenSecondGame from './screen-game-2.js';
 import renderScreen from './render-screen.js';
 
-const screenFirstGameMarkup = `
+
+const quiz = {
+  paintings: [
+    // People
+    `https://k42.kn3.net/CF42609C8.jpg`,
+
+    // Animals
+    `https://k42.kn3.net/D2F0370D6.jpg`,
+
+    // Nature
+    `https://k32.kn3.net/5C7060EC5.jpg`
+  ],
+  photos: [
+    // People
+    `http://i.imgur.com/1KegWPz.jpg`,
+
+    // Animals
+    `https://i.imgur.com/DiHM5Zb.jpg`,
+
+    // Nature
+    `http://i.imgur.com/DKR1HtB.jpg`
+  ]
+};
+
+const INITIAL_STATE = {
+  level: 1,
+  lives: 3,
+  creationTime: new Date()
+};
+
+const game = {
+  type: 1,
+  task: `Угадайте для каждого изображения фото или рисунок?`,
+  options: new Set([
+    {
+      order: 1,
+      source: `https://k42.kn3.net/CF42609C8.jpg`,
+      type: `photo`
+    },
+    {
+      order: 2,
+      source: `http://i.imgur.com/1KegWPz.jpg`,
+      type: `photo`
+    }
+  ])
+};
+
+const optionTemplate = (order) => `
+  <div class="game__option">
+    <img src="${order}" alt="Option ${order}" width="468" height="458">
+  </div>
+`;
+
+const choicesTemplate = (order) => `
+  <label class="game__answer game__answer--photo">
+    <input class="visually-hidden" name="question${order}" type="radio" value="photo">
+    <span>Фото</span>
+  </label>
+  <label class="game__answer game__answer--paint">
+    <input class="visually-hidden" name="question${order}" type="radio" value="paint">
+    <span>Рисунок</span>
+  </label>
+`;
+
+const screenTemplate = `
   <section class="game">
-    <p class="game__task">Угадайте для каждого изображения фото или рисунок?</p>
+    <p class="game__task">${game.task}</p>
     <form class="game__content">
-      <div class="game__option">
-        <img src="http://placehold.it/468x458" alt="Option 1" width="468" height="458">
-        <label class="game__answer game__answer--photo">
-          <input class="visually-hidden" name="question1" type="radio" value="photo">
-          <span>Фото</span>
-        </label>
-        <label class="game__answer game__answer--paint">
-          <input class="visually-hidden" name="question1" type="radio" value="paint">
-          <span>Рисунок</span>
-        </label>
-      </div>
-      <div class="game__option">
-        <img src="http://placehold.it/468x458" alt="Option 2" width="468" height="458">
-        <label class="game__answer  game__answer--photo">
-          <input class="visually-hidden" name="question2" type="radio" value="photo">
-          <span>Фото</span>
-        </label>
-        <label class="game__answer  game__answer--paint">
-          <input class="visually-hidden" name="question2" type="radio" value="paint">
-          <span>Рисунок</span>
-        </label>
-      </div>
+
+  ${[...game.options].forEach((option, order) => {
+    optionTemplate(order);
+    choicesTemplate(order);
+  })}
     </form>
     <ul class="stats">
       <li class="stats__result stats__result--wrong"></li>
@@ -53,7 +100,17 @@ const isAllAnswersRecieved = (answersArray) => {
 
 // creating game-1 node
 
-const screenFirstGame = createMarkupNode(screenFirstGameMarkup);
+const screenFirstGame = createMarkupNode(
+
+    const nestElement = document.createElement(`main`);
+
+    nestElement.innerHTML = markup.trim();
+    nestElement.classList.add(`central`);
+
+    return nestElement;
+  };
+
+);
 
 // listeners
 
