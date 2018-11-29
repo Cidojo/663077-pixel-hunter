@@ -3,7 +3,7 @@ import createMarkupNode from './create-markup-node.js';
 import renderScreen from './render-screen.js';
 
 import screenStats from './screen-stats.js';
-
+import {getRandomInteger} from './utils.js';
 
 const quiz = {
   paintings: [
@@ -18,17 +18,10 @@ const quiz = {
   ]
 };
 
-const gameType = {
-  get level() {
-    return this._levels[Math.floor(Math.random() * 3)];
-  },
-  _levels: [`game-1`, `game-2`, `game-3`],
-};
 
-
-const INITIAL_STATE = Object.freeze({
+const INITIAL_GAME = Object.freeze({
   stage: 1,
-  level: gameType.level,
+  type: 1,
   lives: 3,
   creationTime: new Date()
 });
@@ -36,9 +29,7 @@ const INITIAL_STATE = Object.freeze({
 // const gameState = Object.assign(INITIAL_STATE);
 
 
-const updateGameStateLevel = (state) => {
-  return Object.assign({}, state, {level: gameType.level}, {stage: state.stage + 1});
-};
+
 
 
 const games = {
@@ -101,6 +92,10 @@ const games = {
   }
 };
 
+
+const updateGameStateLevel = (state) => {
+  return Object.assign({}, state, {type: getRandomInteger(Object.keys(games).length) + 1}, {stage: state.stage + 1});
+};
 
 const pickAnswerTemplate = (option) => `
   <label class="game__answer game__answer--photo">
@@ -218,7 +213,7 @@ const switchScreen = (state) => {
     renderScreen(screenStats, true);
   } else {
 
-    const currentGame = games[newState.level];
+    const currentGame = games[`game-` + newState.type];
     const screen = createMarkupNode(screenTemplate(currentGame));
 
     setListeners(screen, currentGame, newState);
@@ -228,4 +223,4 @@ const switchScreen = (state) => {
 };
 
 
-export {screenFirstGame, switchScreen, INITIAL_STATE};
+export {screenFirstGame, switchScreen, INITIAL_GAME};
