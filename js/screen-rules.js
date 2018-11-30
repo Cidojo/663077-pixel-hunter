@@ -1,7 +1,8 @@
 import createMarkupNode from './create-markup-node.js';
 // import screenFirstGame from './screen-game-1.js';
 // import renderScreen from './render-screen.js';
-import {switchScreen, INITIAL_GAME} from './screen-game-1.js';
+import {switchScreen} from './screen-game-1.js';
+import {INITIAL_QUIZ} from './data/quiz.js';
 
 const screenRulesMarkup = `
   <section class="rules">
@@ -35,7 +36,7 @@ const gameStartButton = screenRules.querySelector(`.rules__button`);
 userDataForm.addEventListener(`submit`, (evt) => {
   evt.preventDefault();
 
-  switchScreen(INITIAL_GAME);
+  switchScreen(INITIAL_QUIZ);
 });
 
 nameInputField.addEventListener(`input`, () => {
