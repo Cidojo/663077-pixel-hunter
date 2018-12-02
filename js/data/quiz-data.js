@@ -50,7 +50,7 @@ const quiz = {
       },
       {
         source: `http://i.imgur.com/1KegWPz.jpg`,
-        type: `photo`
+        type: `paint`
       },
       {
         source: `http://i.imgur.com/DKR1HtB.jpg`,
@@ -60,7 +60,7 @@ const quiz = {
     answerSelector: `.game__option`,
 
     get answers() {
-      return [...this.options].map((it) => it.type);
+      return [...this.options].indexOf(`paint`);
     }
   },
 

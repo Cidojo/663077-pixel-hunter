@@ -61,40 +61,33 @@ const screenTemplate = (game) => `
 // @param {answersArray} nodelist of answers, consequence in pairs (like [photo, paint, photo, paint...])
 // $return boolean if all answers has been recieved
 
-const isAllAnswersRecieved = (answersArray) => {
-  return answersArray.length / 2 === answersArray.filter((it) => it.checked).length;
-};
-
-
 const setListeners = (screen, currentGame, state) => {
   const answers = Array.from(screen.querySelectorAll(currentGame.answerSelector));
-  // const currentGameAnswers = [];
 
   answers.forEach((it) => {
-    it.addEventListener(`click`, () => {
-      const result = {
-        type: `NORMAL`
-      };
+    it.addEventListener(`click`, (evt) => {
 
-      let isCorrect = false;
-
+      let isCorrect;
+      let userAnswers;
 
       if (currentGame.kind === GAME_KIND.FIND) {
 
+        userAnswers = [answers.indexOf(evt.currentTarget)];
 
-        switchScreen(state);
-      } else if (isAllAnswersRecieved(answers)) {
-        const answersValues = answers.filter((input) => input.checked).map((input) => input.value);
+        // isCorrect = !state.game.answers.some((element, self) => element === state.game.answers[answers.indexOf(evt.currentTarget)] && self !== answers.indexOf(evt.currentTarget));
 
-        if (state.game.answers.every((current, index) => answersValues[index] === current)) {
-          isCorrect = true;
-        }
+      } else if (currentGame.kind === GAME_KIND.PICK) {
+        userAnswers = answers.filter((element) => element.checked).map((input) => input.value);
 
+        // isCorrect = userAnswers.length === state.game.answers.length ? state.game.answers.every((gameAnswer, index) => userAnswers[index] === gameAnswer) : null;
       }
 
-      state.answers.push(Object.assign({}, result, {isCorrect}));
-      // debugger
-      switchScreen(state);
+      isCorrect = userAnswers.length === state.game.answers.length ? state.game.answers.every((gameAnswer, index) => userAnswers[index] === gameAnswer) : null;
+
+      if (isCorrect !== null) {
+        state.answers.push(Object.assign({}, {type: `NORMAL`}, {isCorrect}));
+        switchScreen(state);
+      }
     });
   });
 };
@@ -102,8 +95,6 @@ const setListeners = (screen, currentGame, state) => {
 
 const switchScreen = (state) => {
   const newState = changeLevel(state);
-
-  console.log(JSON.stringify(state.answers));
 
   if (newState.level === 10) {
     renderScreen(screenStats, true);
