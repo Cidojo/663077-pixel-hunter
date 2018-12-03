@@ -9,11 +9,11 @@ const mainId = main.id;
 // @param {misc} boolean, true if header incudes misc info (life, timer, etc.), transfered to inner fun
 // $result adds pointed node to #main
 
-const renderScreen = (template, common, misc) => {
+const renderScreen = (screenState) => {
   main.id = ``;
   template.id = mainId;
 
-  if (common) {
+  if (screenState) {
     template.insertBefore(insertHeader(misc), template.firstChild);
   }
 

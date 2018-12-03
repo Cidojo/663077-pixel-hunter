@@ -5,6 +5,11 @@ export const GAME_KIND = {
   FIND: `find`
 };
 
+const IMG_TYPE = {
+  PHOTO: `photo`,
+  PAINT: `paint`
+};
+
 const quiz = {
   'game-1': {
     kind: GAME_KIND.PICK,
@@ -12,11 +17,11 @@ const quiz = {
     options: new Set([
       {
         source: `https://k42.kn3.net/CF42609C8.jpg`,
-        type: `photo`
+        type: IMG_TYPE.PHOTO
       },
       {
         source: `http://i.imgur.com/1KegWPz.jpg`,
-        type: `photo`
+        type: IMG_TYPE.PHOTO
       }
     ]),
     answerSelector: `.game__answer input`,
@@ -31,7 +36,7 @@ const quiz = {
     options: new Set([
       {
         source: `https://k42.kn3.net/CF42609C8.jpg`,
-        type: `photo`
+        type: IMG_TYPE.PHOTO
       }
     ]),
     answerSelector: `.game__answer input`,
@@ -46,21 +51,21 @@ const quiz = {
     options: new Set([
       {
         source: `https://k42.kn3.net/CF42609C8.jpg`,
-        type: `photo`
+        type: IMG_TYPE.PHOTO
       },
       {
         source: `http://i.imgur.com/1KegWPz.jpg`,
-        type: `paint`
+        type: IMG_TYPE.PAINT
       },
       {
         source: `http://i.imgur.com/DKR1HtB.jpg`,
-        type: `photo`
+        type: IMG_TYPE.PHOTO
       }
     ]),
     answerSelector: `.game__option`,
 
     get answers() {
-      return [...this.options].indexOf(`paint`);
+      return [[...this.options].map((it) => it.type).indexOf(IMG_TYPE.PAINT)];
     }
   },
 

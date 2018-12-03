@@ -30,7 +30,7 @@ const optionsTemplate = (game) =>
 
 const statsTemplate = (game) => `
   <ul class="stats">
-    <li class="stats__result stats__result--wrong"></li>
+    <li class="stats__result stats__result--{game.answers.}"></li>
     <li class="stats__result stats__result--slow"></li>
     <li class="stats__result stats__result--fast"></li>
     <li class="stats__result stats__result--correct"></li>
@@ -58,6 +58,14 @@ const screenTemplate = (game) => `
 //   return Object.assign({}, state, {type: quiz.randomType}, {stage: state.stage + 1});
 // };
 
+
+const checkAnswer = (answers, evt, state) => {
+
+  const userAnswers = state.game.kind === GAME_KIND.FIND ? [answers.indexOf(evt.currentTarget)] : answers.filter((element) => element.checked).map((input) => input.value);
+
+  return userAnswers.length === state.game.answers.length ? state.game.answers.every((gameAnswer, index) => userAnswers[index] === gameAnswer) : null;
+};
+
 // @param {answersArray} nodelist of answers, consequence in pairs (like [photo, paint, photo, paint...])
 // $return boolean if all answers has been recieved
 
@@ -67,22 +75,7 @@ const setListeners = (screen, currentGame, state) => {
   answers.forEach((it) => {
     it.addEventListener(`click`, (evt) => {
 
-      let isCorrect;
-      let userAnswers;
-
-      if (currentGame.kind === GAME_KIND.FIND) {
-
-        userAnswers = [answers.indexOf(evt.currentTarget)];
-
-        // isCorrect = !state.game.answers.some((element, self) => element === state.game.answers[answers.indexOf(evt.currentTarget)] && self !== answers.indexOf(evt.currentTarget));
-
-      } else if (currentGame.kind === GAME_KIND.PICK) {
-        userAnswers = answers.filter((element) => element.checked).map((input) => input.value);
-
-        // isCorrect = userAnswers.length === state.game.answers.length ? state.game.answers.every((gameAnswer, index) => userAnswers[index] === gameAnswer) : null;
-      }
-
-      isCorrect = userAnswers.length === state.game.answers.length ? state.game.answers.every((gameAnswer, index) => userAnswers[index] === gameAnswer) : null;
+      const isCorrect = checkAnswer(answers, evt, state);
 
       if (isCorrect !== null) {
         state.answers.push(Object.assign({}, {type: `NORMAL`}, {isCorrect}));
@@ -94,13 +87,13 @@ const setListeners = (screen, currentGame, state) => {
 
 
 const switchScreen = (state) => {
+  console.log(JSON.stringify(state.answers));
   const newState = changeLevel(state);
 
   if (newState.level === 10) {
     renderScreen(screenStats, true);
   } else {
 
-    // const currentGame = quiz[newState.type];
     const currentGame = newState.game;
     const screen = createMarkupNode(screenTemplate(currentGame));
 
