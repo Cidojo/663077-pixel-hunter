@@ -1,4 +1,4 @@
-import createMarkupNode from './create-markup-node.js';
+import {createMarkupNode} from './utils.js';
 
 const modalErrorMarkup = `
   <section class="modal">

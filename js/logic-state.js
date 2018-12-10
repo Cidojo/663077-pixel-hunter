@@ -34,4 +34,4 @@ const updateTime = (state) => {
   return Object.assign({}, state, {time: newTime});
 };
 
-export {changeLevel, reapLife, updateTime};
+export {reapLife, updateTime};

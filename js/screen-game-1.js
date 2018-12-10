@@ -1,10 +1,10 @@
-import createMarkupNode from './create-markup-node.js';
+import {createMarkupNode} from './utils.js';
 // import screenSecondGame from './screen-game-2.js';
 import renderScreen from './render-screen.js';
 
 import screenStats from './screen-stats.js';
 import {changeLevel} from './data/quiz.js';
-import {quiz, GAME_KIND} from './data/quiz-data.js';
+import {GAME_KIND} from './data/quiz-data.js';
 
 const pickAnswerTemplate = (option, order) => `
   <label class="game__answer game__answer--photo">
@@ -28,7 +28,7 @@ const optionsTemplate = (game) =>
   }).join(``);
 
 
-const statsTemplate = (game) => `
+const statsTemplate = () => `
   <ul class="stats">
     <li class="stats__result stats__result--{game.answers.}"></li>
     <li class="stats__result stats__result--slow"></li>

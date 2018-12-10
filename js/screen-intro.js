@@ -1,7 +1,8 @@
-import createMarkupNode from './utils.js';
+import {createMarkupNode} from './utils.js';
+import screenGreeting from './screen-greeting.js';
 import renderScreen from './render-screen.js';
 
-export default (state) => {
+export default () => {
   const screenIntroMarkup = `
   <section class="intro">
     <button class="intro__asterisk asterisk" type="button"><span class="visually-hidden">Продолжить</span>*</button>
@@ -11,7 +12,7 @@ export default (state) => {
 
   const screenIntro = createMarkupNode(screenIntroMarkup);
 
-  screenIntro.querySelector(`.intro__asterisk`).addEventListener(`click`, () => renderScreen(state));
+  screenIntro.querySelector(`.intro__asterisk`).addEventListener(`click`, () => renderScreen(screenGreeting()));
 
   return screenIntro;
 };
