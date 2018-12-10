@@ -3,8 +3,9 @@ import {createMarkupNode} from './utils.js';
 // import renderScreen from './render-screen.js';
 import {switchScreen} from './screen-game-1.js';
 import {INITIAL_QUIZ} from './data/quiz.js';
+import header from './screen-header.js';
 
-export default () => {
+export default (state) => {
   const screenRulesMarkup = `
     <section class="rules">
       <h2 class="rules__title">Правила</h2>
@@ -27,6 +28,7 @@ export default () => {
   // creating rules node
 
   const screenRules = createMarkupNode(screenRulesMarkup);
+  screenRules.insertAdjacentElement(`afterbegin`, header(state));
 
   // listeners
 

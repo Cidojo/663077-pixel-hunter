@@ -1,6 +1,7 @@
 import {createMarkupNode} from './utils.js';
 // import screenSecondGame from './screen-game-2.js';
 import renderScreen from './render-screen.js';
+import header from './screen-header.js';
 
 import screenStats from './screen-stats.js';
 import {changeLevel} from './data/quiz.js';
@@ -87,7 +88,7 @@ const setListeners = (screen, currentGame, state) => {
 
 
 const switchScreen = (state) => {
-  console.log(JSON.stringify(state.answers));
+  // console.log(JSON.stringify(state.answers));
   const newState = changeLevel(state);
 
   if (newState.level === 10) {
@@ -97,9 +98,11 @@ const switchScreen = (state) => {
     const currentGame = newState.game;
     const screen = createMarkupNode(screenTemplate(currentGame));
 
+    screen.insertAdjacentElement(`afterbegin`, header(newState, true));
+
     setListeners(screen, currentGame, newState);
 
-    renderScreen(screen, true, true);
+    renderScreen(screen);
   }
 };
 

@@ -2,7 +2,7 @@ import {createMarkupNode} from './utils.js';
 import screenRules from './screen-rules.js';
 import renderScreen from './render-screen.js';
 
-export default () => {
+export default (state) => {
   const screenGreetingMarkup = `
     <section class="greeting central--blur">
       <img class="greeting__logo" src="img/logo_ph-big.svg" width="201" height="89" alt="Pixel Hunter">
@@ -32,7 +32,7 @@ export default () => {
 
   // listeners
 
-  screenGreeting.querySelector(`.greeting__continue`).addEventListener(`click`, () => renderScreen(screenRules(), true));
+  screenGreeting.querySelector(`.greeting__continue`).addEventListener(`click`, () => renderScreen(screenRules(state)));
 
   return screenGreeting;
 };
