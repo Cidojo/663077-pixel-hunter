@@ -1,20 +1,29 @@
-import {quiz} from './quiz-data.js';
+import {game, GAME_KIND} from './game-data.js';
 import {GameSetting} from './../game-rules.js';
 
-const INITIAL_QUIZ = Object.freeze({
+
+const INITIAL_GAME = Object.freeze({
   level: 0,
   type: 0,
   lives: GameSetting.INITIAL_LIVES,
   answers: [],
   creationTime: new Date(),
-  game: null
+  game: game.random
 });
 
-// const checkAnswer = (answer, order) => {
-//   return {
-//     isCorrect: answer.value === currentGame.answers[order]
-//   };
-// };
+
+const checkAnswer = (answers, evt, state) => {
+  const userAnswers = state.game.kind === GAME_KIND.FIND ?
+    [answers.indexOf(evt.currentTarget)]
+    :
+    answers.filter((element) => element.checked).map((input) => input.value);
+
+  return userAnswers.length === state.game.answers.length ?
+    state.game.answers.every((gameAnswer, index) => userAnswers[index] === gameAnswer)
+    :
+    null;
+};
+
 
 // @param {state} object that describes current game state
 // $return new game state object with increased level property
@@ -29,25 +38,27 @@ const changeLevel = (state) => {
 
   const newLevel = state.level === GameSetting.MAX_LEVEL ? GameSetting.MAX_LEVEL : state.level + 1;
 
-  return Object.assign({}, state, {level: newLevel, game: quiz.random});
+  return Object.assign({}, state, {level: newLevel, game: game.random});
 };
+
 
 // @param {state} object that describes current game state
 // $return new game state object with decreased life property
 
 const reapLife = (state) => {
-  if (state !== Object(state) || !state.hasOwnProperty(`lifeAmount`)) {
-    throw new Error(`${state} is not an object or has no liveAmount property`);
+  if (state !== Object(state) || !state.hasOwnProperty(`lives`)) {
+    throw new Error(`${state} is not an object or has no lives property`);
   }
 
-  if (state.lifeAmount < 0) {
-    throw new Error(`incorrect data, state object's lifeAmount property should not be less than 0`);
+  if (state.lives < 0) {
+    throw new Error(`incorrect data, state object's lives property should not be less than 0`);
   }
 
-  const newAmount = state.lifeAmount === 0 ? 0 : state.lifeAmount - 1;
+  const newAmount = state.lives === 0 ? 0 : state.lives - 1;
 
-  return Object.assign({}, state, {lifeAmount: newAmount});
+  return Object.assign({}, state, {lives: newAmount});
 };
+
 
 // @param {state} object that describes current game state
 // $return new game state object with decreased time property
@@ -66,4 +77,5 @@ const updateTime = (state) => {
   return Object.assign({}, state, {time: newTime});
 };
 
-export {INITIAL_QUIZ, changeLevel, reapLife, updateTime};
+
+export {INITIAL_GAME, changeLevel, reapLife, updateTime, checkAnswer};

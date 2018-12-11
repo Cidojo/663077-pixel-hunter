@@ -19,7 +19,7 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
     const testCase = new Array(GameSetting.MAX_LEVEL)
         .fill({
           isCorrect: true,
-          type: `QUICK`
+          type: `FAST`
         });
 
     assert.equal(getScores(testCase, GameSetting.INITIAL_LIVES), 1650);

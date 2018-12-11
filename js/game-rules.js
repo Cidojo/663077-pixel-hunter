@@ -5,15 +5,17 @@ const GameSetting = {
 };
 
 const AnswerType = {
-  QUICK: `QUICK`,
+  FAST: `FAST`,
   SLOW: `SLOW`,
   NORMAL: `NORMAL`,
+  WRONG: `WRONG`,
+  CORRECT: `CORRECT`,
 };
 
 const ScoreBonus = {
   CORRECT: 100,
   EXTRA_LIFE: 50,
-  [AnswerType.QUICK]: 50,
+  [AnswerType.FAST]: 50,
   [AnswerType.SLOW]: -50,
   [AnswerType.NORMAL]: 0
 };

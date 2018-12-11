@@ -2,6 +2,10 @@ import {GameSetting} from './game-rules.js';
 import renderScreen from './render-screen.js';
 import screenGreeting from './screen-greeting.js';
 
+// @param {state} current state Object
+// @param {isFull} boolean flag if full header needed
+// @result header node
+
 export default (state, isFull) => {
   const headerMarkup = `
     <button class="back">

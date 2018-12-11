@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import {changeLevel, reapLife, updateTime} from './../data/quiz.js';
+import {changeLevel, reapLife, updateTime} from './../data/game-mechanics.js';
 
 describe(`Testing updateTime() - function to change timer in game state object`, () => {
   // incorrect data
@@ -34,8 +34,8 @@ describe(`Testing changeLevel() - function to change level in game state object`
   // incorrect data
 
   it(`should deal with incorrect data inside state object`, () => {
-    assert.throws(() => changeLevel({level: -1}), /incorrect data, state object's level property should be in interval from 1 to 10/);
-    assert.throws(() => changeLevel({level: 11}), /incorrect data, state object's level property should be in interval from 1 to 10/);
+    assert.throws(() => changeLevel({level: -1}), /incorrect data, state object's level property should be in interval from 0 to 10/);
+    assert.throws(() => changeLevel({level: 11}), /incorrect data, state object's level property should be in interval from 0 to 10/);
   });
 
   // corner cases
@@ -66,25 +66,25 @@ describe(`Testing reapLife() - function to manage lives count in game state obje
   // incorrect data
 
   it(`should deal with incorrect data inside state object`, () => {
-    assert.throws(() => reapLife({lifeAmount: -1}), /incorrect data, state object's lifeAmount property should not be less than 0/);
+    assert.throws(() => reapLife({lives: -1}), /incorrect data, state object's lives property should not be less than 0/);
   });
 
   // corner cases
 
   it(`should return object with decreased lives`, () => {
-    assert.equal(reapLife({lifeAmount: 3}).lifeAmount, 2);
+    assert.equal(reapLife({lives: 3}).lives, 2);
   });
 
   it(`should not decrease lives if state object lives is 0`, () => {
-    assert.equal(reapLife({lifeAmount: 0}).lifeAmount, 0);
+    assert.equal(reapLife({lives: 0}).lives, 0);
   });
 
   // invalid data
 
-  it(`it should only take object with liveAmount property as a parameter`, () => {
-    assert.throws(() => reapLife({}), /is not an object or has no liveAmount property/);
-    assert.throws(() => reapLife([]), /is not an object or has no liveAmount property/);
-    assert.throws(() => reapLife(0), /is not an object or has no liveAmount property/);
-    assert.throws(() => reapLife({notValidProperty: 2}), /is not an object or has no liveAmount property/);
+  it(`it should only take object with lives property as a parameter`, () => {
+    assert.throws(() => reapLife({}), /is not an object or has no lives property/);
+    assert.throws(() => reapLife([]), /is not an object or has no lives property/);
+    assert.throws(() => reapLife(0), /is not an object or has no lives property/);
+    assert.throws(() => reapLife({notValidProperty: 2}), /is not an object or has no lives property/);
   });
 });

@@ -1,9 +1,9 @@
 import {createMarkupNode} from './utils.js';
-// import screenFirstGame from './screen-game-1.js';
-// import renderScreen from './render-screen.js';
-import {switchScreen} from './screen-game-1.js';
-import {INITIAL_QUIZ} from './data/quiz.js';
+import {INITIAL_GAME} from './data/game-mechanics.js';
 import header from './screen-header.js';
+import renderScreen from './render-screen.js';
+import screenGame from './screen-game.js';
+import {changeLevel} from './data/game-mechanics.js';
 
 export default (state) => {
   const screenRulesMarkup = `
@@ -39,7 +39,7 @@ export default (state) => {
   userDataForm.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
 
-    switchScreen(INITIAL_QUIZ);
+    renderScreen(screenGame(changeLevel(INITIAL_GAME)));
   });
 
   nameInputField.addEventListener(`input`, () => {

@@ -1,7 +1,7 @@
 // @param {max} set maximum random value. max is not included
 // $return random number from [0 to max);
 
-export const getRandomInteger = (max = 1) => Math.floor(Math.random() * max);
+export const getRandomInteger = (max) => Math.floor(Math.random() * max + 1);
 
 // @param {markup} html string
 // $return dom node

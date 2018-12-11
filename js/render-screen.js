@@ -5,7 +5,7 @@ const mainId = main.id;
 // @param {template} screen node to render
 // $result adds pointed node to #main
 
-const renderScreen = (template) => {
+export default (template) => {
   main.id = ``;
   template.id = mainId;
 
@@ -13,5 +13,3 @@ const renderScreen = (template) => {
 
   main = template;
 };
-
-export default renderScreen;
