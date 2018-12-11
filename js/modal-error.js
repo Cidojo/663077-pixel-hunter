@@ -1,7 +1,7 @@
 import {createMarkupNode} from './utils.js';
 
 export default () => {
-  const modalErrorMarkup = `
+  const template = `
     <section class="modal">
       <div class="modal__inner">
         <h2 class="modal__title">Произошла ошибка!</h2>
@@ -10,7 +10,7 @@ export default () => {
     </section>
   `;
 
-  const modalError = createMarkupNode(modalErrorMarkup);
+  const node = createMarkupNode(template);
 
-  return modalError;
+  return node;
 };

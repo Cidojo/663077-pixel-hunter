@@ -6,7 +6,7 @@ import screenGame from './screen-game.js';
 import {changeLevel} from './data/game-mechanics.js';
 
 export default (state) => {
-  const screenRulesMarkup = `
+  const template = `
     <section class="rules">
       <h2 class="rules__title">Правила</h2>
       <ul class="rules__description">
@@ -25,16 +25,12 @@ export default (state) => {
     </section>
   `;
 
-  // creating rules node
+  const node = createMarkupNode(template);
+  node.insertAdjacentElement(`afterbegin`, header(state));
 
-  const screenRules = createMarkupNode(screenRulesMarkup);
-  screenRules.insertAdjacentElement(`afterbegin`, header(state));
-
-  // listeners
-
-  const nameInputField = screenRules.querySelector(`.rules__input`);
-  const userDataForm = screenRules.querySelector(`.rules__form`);
-  const gameStartButton = screenRules.querySelector(`.rules__button`);
+  const nameInputField = node.querySelector(`.rules__input`);
+  const userDataForm = node.querySelector(`.rules__form`);
+  const gameStartButton = node.querySelector(`.rules__button`);
 
   userDataForm.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
@@ -43,8 +39,8 @@ export default (state) => {
   });
 
   nameInputField.addEventListener(`input`, () => {
-    gameStartButton.disabled = nameInputField.value ? false : true;
+    gameStartButton.disabled = !nameInputField.value;
   });
 
-  return screenRules;
+  return node;
 };

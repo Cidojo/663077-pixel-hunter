@@ -55,7 +55,7 @@ const screenGameFun = (state) => {
       if (isCorrect !== null) {
         state.answers.push(Object.assign({}, {type: `NORMAL`}, {isCorrect}));
         if (state.level === 10) {
-          renderScreen(screenStats());
+          renderScreen(screenStats(state));
         } else {
           renderScreen(screenGameFun(changeLevel(state)));
         }

@@ -3,7 +3,7 @@ import screenRules from './screen-rules.js';
 import renderScreen from './render-screen.js';
 
 export default (state) => {
-  const screenGreetingMarkup = `
+  const template = `
     <section class="greeting central--blur">
       <img class="greeting__logo" src="img/logo_ph-big.svg" width="201" height="89" alt="Pixel Hunter">
       <div class="greeting__asterisk asterisk"><span class="visually-hidden">Я просто красивая звёздочка</span>*</div>
@@ -26,13 +26,9 @@ export default (state) => {
     </section>
   `;
 
-  // creating greeting node
+  const node = createMarkupNode(template);
 
-  const screenGreeting = createMarkupNode(screenGreetingMarkup);
+  node.querySelector(`.greeting__continue`).addEventListener(`click`, () => renderScreen(screenRules(state)));
 
-  // listeners
-
-  screenGreeting.querySelector(`.greeting__continue`).addEventListener(`click`, () => renderScreen(screenRules(state)));
-
-  return screenGreeting;
+  return node;
 };

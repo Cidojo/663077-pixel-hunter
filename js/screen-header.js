@@ -7,7 +7,7 @@ import screenGreeting from './screen-greeting.js';
 // @result header node
 
 export default (state, isFull) => {
-  const headerMarkup = `
+  const template = `
     <button class="back">
       <span class="visually-hidden">Вернуться к началу</span>
       <svg class="icon" width="45" height="45" viewBox="0 0 45 45" fill="#000000">
@@ -30,13 +30,13 @@ export default (state, isFull) => {
       </div>` : ``}
   `;
 
-  const header = document.createElement(`header`);
-  header.classList.add(`header`);
-  header.innerHTML = headerMarkup;
+  const node = document.createElement(`header`);
+  node.classList.add(`header`);
+  node.innerHTML = template;
 
-  header.querySelector(`.back`).addEventListener(`click`, () => {
+  node.querySelector(`.back`).addEventListener(`click`, () => {
     renderScreen(screenGreeting());
   });
 
-  return header;
+  return node;
 };

@@ -1,7 +1,7 @@
 import {createMarkupNode} from './utils.js';
 
 export default () => {
-  const modalConfirmMarkup = `
+  const template = `
   <section class="modal">
     <form class="modal__inner">
       <button class="modal__close" type="button">
@@ -17,7 +17,7 @@ export default () => {
   </section>
 `;
 
-  const modalConfirm = createMarkupNode(modalConfirmMarkup);
+  const node = createMarkupNode(template);
 
-  return modalConfirm;
+  return node;
 };

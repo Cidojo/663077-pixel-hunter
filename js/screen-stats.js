@@ -1,6 +1,7 @@
 import {createMarkupNode} from './utils.js';
+import header from './screen-header.js';
 
-export default () => {
+export default (state) => {
   const screenStatsMarkup = `
     <section class="result">
       <h2 class="result__title">Победа!</h2>
@@ -103,6 +104,8 @@ export default () => {
       </table>
     </section>
   `;
+  const node = createMarkupNode(screenStatsMarkup);
+  node.insertAdjacentElement(`afterbegin`, header(state));
 
-  return createMarkupNode(screenStatsMarkup);
+  return node;
 };
