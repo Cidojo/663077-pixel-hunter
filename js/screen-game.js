@@ -67,25 +67,24 @@ const screenGame = (state) => {
         }
       };
 
-      if (!canContinue(state)) {
-        renderScreen(screenStats(state));
-      } else {
 
-        const isCorrect = checkAnswer(answers, evt, state);
+      const isCorrect = checkAnswer(answers, evt, state);
 
-        if (isCorrect !== null) {
-          state.answers.push(Object.assign({}, {type: getAnswerType(state)}, {isCorrect}));
+      if (isCorrect !== null) {
+        state.answers.push(Object.assign({}, {type: getAnswerType(state)}, {isCorrect}));
 
-          if (isLast(state)) {
+        if (isLast(state)) {
+          renderScreen(screenStats(state));
+        } else {
+          if (!isCorrect && !canContinue(state)) {
             renderScreen(screenStats(state));
           } else {
-
-            state = isCorrect ? state : reapLife(state);
-            renderScreen(screenGame(changeLevel(state)));
+            renderScreen(screenGame(changeLevel(reapLife(state))));
           }
         }
       }
     });
+
   });
 
   return node;
@@ -96,6 +95,5 @@ const startGame = () => {
 
   renderScreen(screenGame(state));
 };
-
 
 export default startGame;
