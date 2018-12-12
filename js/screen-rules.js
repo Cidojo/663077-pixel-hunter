@@ -1,9 +1,6 @@
 import {createMarkupNode} from './utils.js';
-import {INITIAL_GAME} from './data/game-mechanics.js';
 import header from './screen-header.js';
-import renderScreen from './render-screen.js';
-import screenGame from './screen-game.js';
-import {changeLevel} from './data/game-mechanics.js';
+import startGame from './screen-game.js';
 
 export default (state) => {
   const template = `
@@ -35,7 +32,7 @@ export default (state) => {
   userDataForm.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
 
-    renderScreen(screenGame(changeLevel(INITIAL_GAME)));
+    startGame();
   });
 
   nameInputField.addEventListener(`input`, () => {

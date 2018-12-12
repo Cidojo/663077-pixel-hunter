@@ -5,11 +5,11 @@ const mainId = main.id;
 // @param {template} screen node to render
 // $result adds pointed node to #main
 
-export default (template) => {
+export default (node) => {
   main.id = ``;
-  template.id = mainId;
+  node.id = mainId;
 
-  body.replaceChild(template, main);
+  body.replaceChild(node, main);
 
-  main = template;
+  main = node;
 };

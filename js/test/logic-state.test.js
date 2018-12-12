@@ -34,20 +34,16 @@ describe(`Testing changeLevel() - function to change level in game state object`
   // incorrect data
 
   it(`should deal with incorrect data inside state object`, () => {
-    assert.throws(() => changeLevel({level: -1}), /incorrect data, state object's level property should be in interval from 0 to 10/);
-    assert.throws(() => changeLevel({level: 11}), /incorrect data, state object's level property should be in interval from 0 to 10/);
+    assert.throws(() => changeLevel({level: -1}), /incorrect data, state object's level property should be in interval from 1 to 10/);
+    assert.throws(() => changeLevel({level: 0}), /incorrect data, state object's level property should be in interval from 1 to 10/);
+    assert.throws(() => changeLevel({level: 11}), /incorrect data, state object's level property should be in interval from 1 to 10/);
   });
 
   // corner cases
 
   it(`should return object with increased level`, () => {
-    assert.equal(changeLevel({level: 0}).level, 1);
     assert.equal(changeLevel({level: 1}).level, 2);
     assert.equal(changeLevel({level: 9}).level, 10);
-  });
-
-  it(`should not increase level if state object level is maximum (10)`, () => {
-    assert.equal(changeLevel({level: 10}).level, 10);
   });
 
   // invalid data

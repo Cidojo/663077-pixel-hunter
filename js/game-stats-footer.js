@@ -46,10 +46,3 @@ export default (state) => {
 
   return stats;
 };
-
-// state = {
-//   answers: [{
-//     type: `NORMAL`,
-//     isCorrect: true
-//   }]
-// };
