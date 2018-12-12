@@ -1,4 +1,4 @@
-import {game, GAME_KIND} from './game-data.js';
+import {game, GameKind} from './game-data.js';
 import {GameSetting} from './../game-rules.js';
 
 
@@ -18,7 +18,7 @@ const INITIAL_GAME = Object.freeze({
 // $return null if not all answers have been recieved, else returns boolean value if correct or not
 
 const checkAnswer = (answers, evt, state) => {
-  const userAnswers = state.game.kind === GAME_KIND.FIND ?
+  const userAnswers = state.game.kind === GameKind.FIND ?
     [answers.indexOf(evt.currentTarget)]
     :
     answers.filter((element) => element.checked).map((input) => input.value);

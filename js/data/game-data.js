@@ -1,6 +1,6 @@
 import {getRandomInteger} from './../utils.js';
 
-const GAME_KIND = {
+const GameKind = {
   PICK: `pick`,
   FIND: `find`
 };
@@ -12,7 +12,7 @@ const IMG_TYPE = {
 
 const game = {
   'game-1': {
-    kind: GAME_KIND.PICK,
+    kind: GameKind.PICK,
     task: `Угадайте для каждого изображения фото или рисунок?`,
     options: [
       {
@@ -31,7 +31,7 @@ const game = {
     }
   },
   'game-2': {
-    kind: GAME_KIND.PICK,
+    kind: GameKind.PICK,
     task: `Угадай, фото или рисунок?`,
     options: [
       {
@@ -46,7 +46,7 @@ const game = {
     }
   },
   'game-3': {
-    kind: GAME_KIND.FIND,
+    kind: GameKind.FIND,
     task: `Найдите рисунок среди изображений`,
     options: [
       {
@@ -74,4 +74,4 @@ const game = {
   }
 };
 
-export {game, GAME_KIND};
+export {game, GameKind};

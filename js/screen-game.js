@@ -2,7 +2,7 @@ import {createMarkupNode} from './utils.js';
 import header from './screen-header.js';
 import stats from './game-stats-footer.js';
 import {checkAnswer, reapLife} from './data/game-mechanics.js';
-import {GAME_KIND} from './data/game-data.js';
+import {GameKind} from './data/game-data.js';
 import {changeLevel} from './data/game-mechanics.js';
 import renderScreen from './render-screen.js';
 import screenStats from './screen-stats.js';
@@ -26,7 +26,7 @@ const screenGame = (state) => {
       return `
       <div class="game__option">
         <img src="${option.source}" alt="Option ${order + 1}" width="468" height="458">
-        ${state.game.kind === GAME_KIND.PICK ? pickAnswerTemplate(order) : ``}
+        ${state.game.kind === GameKind.PICK ? pickAnswerTemplate(order) : ``}
       </div>
       `;
     }).join(``);

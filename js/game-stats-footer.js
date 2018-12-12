@@ -1,34 +1,36 @@
 import {GameSetting, AnswerType} from './game-rules.js';
 
 const statsController = (state) => {
-  const statsIcons = [];
-
-  let counter = 0;
-
-  while (state.answers.length && counter < state.answers.length) {
-    let current = `unknown`;
-
-    switch (true) {
-      case (!state.answers[counter].isCorrect):
-        current = AnswerType.WRONG.toLowerCase();
-        break;
-      case (state.answers[counter].isCorrect):
-        current = AnswerType.CORRECT.toLowerCase();
-        break;
-      case (state.answers[counter].type === AnswerType.FAST):
-        current = AnswerType.FAST.toLowerCase();
-        break;
-      case (state.answers[counter].type === AnswerType.SLOW):
-        current = AnswerType.SLOW.toLowerCase();
-        break;
-    }
-
-    statsIcons.push(`<li class="stats__result stats__result--${current}"></li>`);
-
-    counter++;
-  }
-
-  return statsIcons.join(``);
+  // const statsIcons = [];
+  //
+  // let counter = 0;
+  //
+  // while (state.answers.length && counter < state.answers.length) {
+  //   let current = `unknown`;
+  //
+  //   switch (true) {
+  //     case (!state.answers[counter].isCorrect):
+  //       current = AnswerType.WRONG.toLowerCase();
+  //       break;
+  //     case (state.answers[counter].isCorrect):
+  //       current = AnswerType.CORRECT.toLowerCase();
+  //       break;
+  //     case (state.answers[counter].type === AnswerType.FAST):
+  //       current = AnswerType.FAST.toLowerCase();
+  //       break;
+  //     case (state.answers[counter].type === AnswerType.SLOW):
+  //       current = AnswerType.SLOW.toLowerCase();
+  //       break;
+  //   }
+  //
+  //   statsIcons.push(`<li class="stats__result stats__result--${current}"></li>`);
+  //
+  //   counter++;
+  // }
+  return state.answers.map((it) => {
+    return `<li class="stats__result stats__result--${it.type}"></li>`;
+  }).join(``);
+  // return statsIcons.join(``);
 };
 
 export default (state) => {
