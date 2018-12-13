@@ -5,7 +5,7 @@ import {checkAnswer, reapLife} from './data/game-mechanics.js';
 import {GameKind} from './data/game-data.js';
 import {changeLevel} from './data/game-mechanics.js';
 import renderScreen from './render-screen.js';
-import screenStats from './screen-stats.js';
+import {screenStats, MockStats} from './screen-stats.js';
 import {UserAnswer} from './game-rules.js';
 
 import {INITIAL_GAME} from './data/game-mechanics.js';
@@ -66,10 +66,10 @@ const screenGame = (state) => {
         state.answers.push(new UserAnswer(isCorrect, state.time));
 
         if (isLast(state)) {
-          renderScreen(screenStats(state));
+          renderScreen(screenStats(state, MockStats));
         } else {
           if (!isCorrect && !canContinue(state)) {
-            renderScreen(screenStats(state));
+            renderScreen(screenStats(state, MockStats));
           } else {
             renderScreen(screenGame(changeLevel(isCorrect ? state : reapLife(state))));
           }
