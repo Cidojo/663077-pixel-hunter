@@ -2,41 +2,76 @@ import {createMarkupNode} from './utils.js';
 import header from './screen-header.js';
 import getScores from './logic-getscores.js';
 import stats from './game-stats-footer.js';
+import {AnswerType, ScoreBonus} from './game-rules.js';
+
+const ExtraResult = {
+  FAST: `FAST`,
+  SLOW: `SLOW`,
+  ALIVE: `LIVES`
+};
+
+const ExtraResultModifacators = {
+  [ExtraResult.FAST]: `fast`,
+  [ExtraResult.SLOW]: `slow`,
+  [ExtraResult.ALIVE]: `alive`
+};
+
+const ExtraResultTitle = {
+  [ExtraResult.FAST]: `Бонус за скорость`,
+  [ExtraResult.SLOW]: `Штраф за медлительность`,
+  [ExtraResult.ALIVE]: `Бонус за жизни`
+};
+
+class ResultStats {
+  constructor(state) {
+    this.lives = state.lives;
+    this.correct = state.answers.filter((it) => it.isCorrect).length;
+    this.fast = state.answers.filter((it) => it.type === AnswerType.FAST).length;
+    this.slow = state.answers.filter((it) => it.type === AnswerType.SLOW).length;
+    this.victory = this.lives >= 0;
+    this.scores = getScores(state.answers, state.lives);
+  }
+}
 
 export default (state) => {
+  const result = new ResultStats(state);
+
+  class Extra {
+    constructor(type) {
+      this.kind = type;
+      this.title = ExtraResultTitle[type];
+      this.bonus = ScoreBonus[type];
+      this.quantity = result[type.toLowerCase()];
+    }
+
+    get template() {
+      return `
+        <tr>
+          <td></td>
+          <td class="result__extra">${this.title}:</td>
+          <td class="result__extra">${this.quantity} <span class="stats__result stats__result--${ExtraResultModifacators.type}"></span></td>
+          <td class="result__points">× ${Math.abs(this.bonus)}</td>
+          <td class="result__total">${this.quantity * this.bonus}</td>
+        </tr>
+      `;
+    }
+  }
+
   const screenStatsMarkup = `
     <section class="result">
-      <h2 class="result__title">${state.lives < 0 || state.answers.length < 10 ? `Поражение` : `Победа!`}</h2>
+      <h2 class="result__title">${result.victory ? `Победа!` : `Поражение`}</h2>
       <table class="result__table">
         <tr>
           <td class="result__number">1.</td>
           <td colspan="2">
+            ${stats(state)}
           </td>
           <td class="result__points">× 100</td>
-          <td class="result__total">${state.answers.slice().filter((it) => it.isCorrect).length * 100}</td>
+          <td class="result__total">${result.correct * ScoreBonus.CORRECT}</td>
         </tr>
-        ${state.answers.slice().filter((it) => it.type === `FAST`).length ? `
-          <tr>
-            <td></td>
-            <td class="result__extra">Бонус за скорость:</td>
-            <td class="result__extra">${state.answers.slice().filter((it) => it.type === `FAST`).length} <span class="stats__result stats__result--fast"></span></td>
-            <td class="result__points">× 50</td>
-            <td class="result__total">${state.answers.slice().filter((it) => it.type === `FAST`).length * 50}</td>
-          </tr>` : ``}
-        ${state.lives ? `<tr>
-          <td></td>
-          <td class="result__extra">Бонус за жизни:</td>
-          <td class="result__extra">${state.lives}<span class="stats__result stats__result--alive"></span></td>
-          <td class="result__points">× 50</td>
-          <td class="result__total">${state.lives * 50}</td>
-        </tr>` : ``}
-        ${state.answers.slice().filter((it) => it.type === `SLOW`).length ? `<tr>
-          <td></td>
-          <td class="result__extra">Штраф за медлительность:</td>
-          <td class="result__extra">${state.answers.slice().filter((it) => it.type === `SLOW`).length} <span class="stats__result stats__result--slow"></span></td>
-          <td class="result__points">× 50</td>
-          <td class="result__total">-${state.answers.slice().filter((it) => it.type === `SLOW`).length * 50}</td>
-        </tr>` : ``}
+        ${result.fast ? new Extra(ExtraResult.FAST).template : ``}
+        ${result.lives ? new Extra(ExtraResult.ALIVE).template : ``}
+        ${result.slow ? new Extra(ExtraResult.SLOW).template : ``}
         <tr>
           <td colspan="5" class="result__total  result__total--final">${getScores(state.answers, state.lives) === -1 ? `FAIL` : getScores(state.answers, state.lives)}</td>
         </tr>
@@ -97,9 +132,6 @@ export default (state) => {
   `;
 
   const node = createMarkupNode(screenStatsMarkup);
-  const results = node.querySelectorAll(`td[colspan="2"]`);
-
-  results[0].appendChild(stats(state));
 
   node.insertAdjacentElement(`afterbegin`, header(state));
 

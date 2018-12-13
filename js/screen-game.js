@@ -6,6 +6,7 @@ import {GameKind} from './data/game-data.js';
 import {changeLevel} from './data/game-mechanics.js';
 import renderScreen from './render-screen.js';
 import screenStats from './screen-stats.js';
+import {UserAnswer} from './game-rules.js';
 
 import {INITIAL_GAME} from './data/game-mechanics.js';
 
@@ -38,6 +39,7 @@ const screenGame = (state) => {
       <form class="game__content">
       ${optionsTemplate(state.game)}
       </form>
+      ${stats(state)}
     </section>
   `;
 
@@ -45,7 +47,7 @@ const screenGame = (state) => {
 
   node.insertAdjacentElement(`afterbegin`, header(state, true));
 
-  node.querySelector(`section`).appendChild(stats(state));
+  // node.querySelector(`section`).appendChild(stats(state));
 
   const answers = Array.from(node.querySelectorAll(state.game.answerSelector));
 
@@ -57,21 +59,11 @@ const screenGame = (state) => {
       const isLast = (currentState) => {
         return currentState.level + 1 > 10;
       };
-      const getAnswerType = (currentState) => {
-        if (currentState.time < 10) {
-          return `FAST`;
-        } else if (currentState.time > 20) {
-          return `SLOW`;
-        } else {
-          return `NORMAL`;
-        }
-      };
-
 
       const isCorrect = checkAnswer(answers, evt, state);
 
       if (isCorrect !== null) {
-        state.answers.push(Object.assign({}, {type: getAnswerType(state)}, {isCorrect}));
+        state.answers.push(new UserAnswer(isCorrect, state.time));
 
         if (isLast(state)) {
           renderScreen(screenStats(state));
@@ -79,7 +71,7 @@ const screenGame = (state) => {
           if (!isCorrect && !canContinue(state)) {
             renderScreen(screenStats(state));
           } else {
-            renderScreen(screenGame(changeLevel(reapLife(state))));
+            renderScreen(screenGame(changeLevel(isCorrect ? state : reapLife(state))));
           }
         }
       }
@@ -91,9 +83,7 @@ const screenGame = (state) => {
 };
 
 const startGame = () => {
-  const state = Object.assign({}, INITIAL_GAME);
-
-  renderScreen(screenGame(state));
+  renderScreen(screenGame(Object.assign({}, INITIAL_GAME)));
 };
 
 export default startGame;

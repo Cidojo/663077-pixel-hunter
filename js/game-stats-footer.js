@@ -1,50 +1,16 @@
-import {GameSetting, AnswerType} from './game-rules.js';
-
-const statsController = (state) => {
-  // const statsIcons = [];
-  //
-  // let counter = 0;
-  //
-  // while (state.answers.length && counter < state.answers.length) {
-  //   let current = `unknown`;
-  //
-  //   switch (true) {
-  //     case (!state.answers[counter].isCorrect):
-  //       current = AnswerType.WRONG.toLowerCase();
-  //       break;
-  //     case (state.answers[counter].isCorrect):
-  //       current = AnswerType.CORRECT.toLowerCase();
-  //       break;
-  //     case (state.answers[counter].type === AnswerType.FAST):
-  //       current = AnswerType.FAST.toLowerCase();
-  //       break;
-  //     case (state.answers[counter].type === AnswerType.SLOW):
-  //       current = AnswerType.SLOW.toLowerCase();
-  //       break;
-  //   }
-  //
-  //   statsIcons.push(`<li class="stats__result stats__result--${current}"></li>`);
-  //
-  //   counter++;
-  // }
-  return state.answers.map((it) => {
-    return `<li class="stats__result stats__result--${it.type}"></li>`;
-  }).join(``);
-  // return statsIcons.join(``);
-};
+import {GameSetting} from './game-rules.js';
 
 export default (state) => {
-  const statsTemplate = `
-    ${statsController(state)}
+  return `
+    <ul class="stats">
+      ${state.answers
+        .map((it) => {
+          return `<li class="stats__result stats__result--${it.type.toLowerCase()}"></li>`;
+        }).join(``)}
 
-    ${new Array(GameSetting.MAX_LEVEL - state.answers.length)
-      .fill(`<li class="stats__result stats__result--unknown"></li>`)
-      .join(``)}
+      ${new Array(GameSetting.MAX_LEVEL - state.answers.length)
+        .fill(`<li class="stats__result stats__result--unknown"></li>`)
+        .join(``)}
+    </ul>
     `;
-
-  const stats = document.createElement(`ul`);
-  stats.classList.add(`stats`);
-  stats.innerHTML = statsTemplate;
-
-  return stats;
 };

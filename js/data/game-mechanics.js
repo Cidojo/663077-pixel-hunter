@@ -7,7 +7,7 @@ const INITIAL_GAME = Object.freeze({
   type: 0,
   lives: GameSetting.INITIAL_LIVES,
   answers: [],
-  time: 15,
+  time: 21,
   game: game.random
 });
 
