@@ -135,17 +135,11 @@ class GameResultView {
           <td class="result__total ${model.extraResults.length ? `` : `result__total--final`}">${model.correctAmount * ScoreBonus.CORRECT}</td>
         </tr>
         ${model.extraResults.length ? `
-          ${extraResultTemplate(model)}
+          ${model.extraResults.map((it) => it.template).join(``)}
             <tr>
               <td colspan="5" class="result__total  result__total--final">${model.totalScores}</td>
             </tr>` : ``}
         `;
-
-    const extraResultTemplate = (result) => `
-      ${result.fastAmount ? new Extra(ExtraResultKind.FAST, result).template : ``}
-      ${result.livesAmount ? new Extra(ExtraResultKind.ALIVE, result).template : ``}
-      ${result.slowAmount ? new Extra(ExtraResultKind.SLOW, result).template : ``}
-    `;
 
     return `
       <table class="result__table">
