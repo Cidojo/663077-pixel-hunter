@@ -65,15 +65,12 @@ const screenGame = (state) => {
       if (isCorrect !== null) {
         state.answers.push(new UserAnswer(isCorrect, state.time));
 
-        if (isLast(state)) {
-          renderScreen(screenStats(state, MockStats));
-        } else {
-          if (!isCorrect && !canContinue(state)) {
-            renderScreen(screenStats(state, MockStats));
-          } else {
-            renderScreen(screenGame(changeLevel(isCorrect ? state : reapLife(state))));
-          }
-        }
+        const next = isLast(state) || (!isCorrect && !canContinue(state)) ?
+          screenStats(state, MockStats)
+          :
+          screenGame(changeLevel(isCorrect ? state : reapLife(state)));
+
+        renderScreen(next);
       }
     });
 

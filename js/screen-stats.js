@@ -4,107 +4,172 @@ import getScores from './logic-getscores.js';
 import stats from './game-stats-footer.js';
 import {AnswerType, ScoreBonus, GameSetting} from './game-rules.js';
 
-const ExtraResult = {
-  FAST: `FAST`,
-  SLOW: `SLOW`,
-  ALIVE: `LIVES`
+const MockGame1 = {
+  lives: 0,
+  answers: new Array(GameSetting.MAX_LEVEL)
+      .fill({
+        isCorrect: true,
+        type: `CORRECT`
+      })
 };
 
-const ExtraResultModifacators = {
-  [ExtraResult.FAST]: `fast`,
-  [ExtraResult.SLOW]: `slow`,
-  [ExtraResult.ALIVE]: `alive`
+const MockGame2 = {
+  lives: 3,
+  answers: new Array(GameSetting.MAX_LEVEL)
+      .fill({
+        isCorrect: true,
+        type: `SLOW`
+      }, 0, 8)
+      .fill({
+        isCorrect: true,
+        type: `FAST`
+      }, 8)
 };
 
-const ExtraResultTitle = {
-  [ExtraResult.FAST]: `Бонус за скорость`,
-  [ExtraResult.SLOW]: `Штраф за медлительность`,
-  [ExtraResult.ALIVE]: `Бонус за жизни`
-};
-
-class ResultStats {
-  constructor(state) {
-    this.lives = state.lives;
-    this.correct = state.answers.filter((it) => it.isCorrect).length;
-    this.fast = state.answers.filter((it) => it.type === AnswerType.FAST).length;
-    this.slow = state.answers.filter((it) => it.type === AnswerType.SLOW).length;
-    this.victory = this.correct >= GameSetting.MAX_LEVEL - GameSetting.INITIAL_LIVES;
-    this.scores = getScores(state.answers, state.lives);
-  }
-}
-
-const MockGame = {
-  lives: 2,
-  answers: new Array(10).fill({isCorrect: true, type: `FAST`})
+const MockGame3 = {
+  lives: 0,
+  answers: new Array(GameSetting.MAX_LEVEL)
+      .fill({
+        isCorrect: true,
+        type: `CORRECT`
+      }, 0, 6)
+      .fill({
+        isCorrect: false,
+        type: `WRONG`
+      }, 6)
 };
 
 export const MockStats = [
-  MockGame,
-  MockGame
+  MockGame1,
+  MockGame2,
+  MockGame3
 ];
+
+const ExtraResultKind = {
+  FAST: `FAST`,
+  SLOW: `SLOW`,
+  ALIVE: `LIVES`,
+};
+
+const ExtraResultModifacator = {
+  [ExtraResultKind.FAST]: `fast`,
+  [ExtraResultKind.SLOW]: `slow`,
+  [ExtraResultKind.ALIVE]: `alive`,
+};
+
+const ExtraResultTitle = {
+  [ExtraResultKind.FAST]: `Бонус за скорость`,
+  [ExtraResultKind.SLOW]: `Штраф за медлительность`,
+  [ExtraResultKind.ALIVE]: `Бонус за жизни`,
+};
+
+class GameResult {
+  constructor(game) {
+    this.game = game;
+    this.livesAmount = game.lives;
+    this.correctAmount = game.answers.filter((it) => it.isCorrect).length;
+    this.fastAmount = game.answers.filter((it) => it.type === AnswerType.FAST).length;
+    this.slowAmount = game.answers.filter((it) => it.type === AnswerType.SLOW).length;
+    this.isVictory = this.correctAmount >= GameSetting.MAX_LEVEL - GameSetting.INITIAL_LIVES;
+    this.totalScores = getScores(game.answers, game.lives);
+  }
+  get extraResults() {
+    const extra = [];
+    if (this.fastAmount) {
+      extra.push(new Extra(ExtraResultKind.FAST, this));
+    }
+    if (this.livesAmount) {
+      extra.push(new Extra(ExtraResultKind.ALIVE, this));
+    }
+    if (this.slowAmount) {
+      extra.push(new Extra(ExtraResultKind.SLOW, this));
+    }
+
+    return extra;
+  }
+}
+
+class Extra {
+  constructor(extraResultKind, result) {
+    this.kind = extraResultKind;
+    this.title = ExtraResultTitle[extraResultKind];
+    this.bonus = ScoreBonus[extraResultKind];
+    this.quantity = result[extraResultKind.toLowerCase() + `Amount`];
+    this.modificator = ExtraResultModifacator[this.kind];
+  }
+
+  get template() {
+    return `
+      <tr>
+        <td></td>
+        <td class="result__extra">${this.title}:</td>
+        <td class="result__extra">${this.quantity} <span class="stats__result stats__result--${this.modificator}"></span></td>
+        <td class="result__points">× ${Math.abs(this.bonus)}</td>
+        <td class="result__total">${this.quantity * this.bonus}</td>
+      </tr>
+    `;
+  }
+}
+
+class GameResultView {
+  constructor(model, order) {
+    this.model = model;
+    this.order = order + 1;
+  }
+
+  get template() {
+    const lostResult = (model) => `
+        <tr>
+          <td class="result__number">${this.order}.</td>
+          <td>${stats(model.game)}</td>
+          <td class="result__total"></td>
+          <td class="result__total  result__total--final">fail</td>
+        </tr>
+    `;
+
+    const winResult = (model) => `
+        <tr>
+          <td class="result__number">${this.order}.</td>
+          <td ${model.extraResults.length ? `colspan="2"` : ``}>${stats(model.game)}</td>
+          <td class="result__points">× ${ScoreBonus.CORRECT}</td>
+          <td class="result__total ${model.extraResults.length ? `` : `result__total--final`}">${model.correctAmount * ScoreBonus.CORRECT}</td>
+        </tr>
+        ${model.extraResults.length ? `
+          ${extraResultTemplate(model)}
+            <tr>
+              <td colspan="5" class="result__total  result__total--final">${model.totalScores}</td>
+            </tr>` : ``}
+        `;
+
+    const extraResultTemplate = (result) => `
+      ${result.fastAmount ? new Extra(ExtraResultKind.FAST, result).template : ``}
+      ${result.livesAmount ? new Extra(ExtraResultKind.ALIVE, result).template : ``}
+      ${result.slowAmount ? new Extra(ExtraResultKind.SLOW, result).template : ``}
+    `;
+
+    return `
+      <table class="result__table">
+        ${this.model.isVictory ? winResult(this.model) : lostResult(this.model)}
+      </table>
+    `;
+  }
+}
+
 
 export const screenStats = (state, history) => {
   history.unshift(state);
 
-  class Extra {
-    constructor(type, result) {
-      this.kind = type;
-      this.title = ExtraResultTitle[type];
-      this.bonus = ScoreBonus[type];
-      this.quantity = result[type.toLowerCase()];
-    }
-
-    get template() {
-      return `
-        <tr>
-          <td></td>
-          <td class="result__extra">${this.title}:</td>
-          <td class="result__extra">${this.quantity} <span class="stats__result stats__result--${ExtraResultModifacators.type}"></span></td>
-          <td class="result__points">× ${Math.abs(this.bonus)}</td>
-          <td class="result__total">${this.quantity * this.bonus}</td>
-        </tr>
-      `;
-    }
-  }
-
   const getTable = (game, order) => {
-    const result = new ResultStats(game);
+    const result = new GameResult(game);
 
-    return (result.victory && (result.fast || result.lives || result.slow)) ?
-      `<table class="result__table">
-        <tr>
-          <td class="result__number">${order + 1}.</td>
-          <td colspan="2">
-            ${stats(game)}
-          </td>
-          <td class="result__points">× ${ScoreBonus.CORRECT}</td>
-          <td class="result__total">${result.correct * ScoreBonus.CORRECT}</td>
-        </tr>
-        ${result.fast ? new Extra(ExtraResult.FAST, result).template : ``}
-        ${result.lives ? new Extra(ExtraResult.ALIVE, result).template : ``}
-        ${result.slow ? new Extra(ExtraResult.SLOW, result).template : ``}
-        <tr>
-          <td colspan="5" class="result__total  result__total--final">${result.scores}</td>
-        </tr>
-      </table>`
-      :
-      `<table class="result__table">
-        <tr>
-          <td class="result__number">${order + 1}.</td>
-          <td>
-            ${stats(game)}
-          </td>
-          <td class="result__total"></td>
-          <td class="result__total  result__total--final">${result.victory ? getScores(game.answers, game.lives) : `fail`}</td>
-        </tr>
-      </table>`;
+    return new GameResultView(result, order).template;
   };
 
-  const curentResult = new ResultStats(state);
+  const curentResult = new GameResult(state);
 
   const screenStatsMarkup = `
     <section class="result">
-      <h2 class="result__title">${curentResult.victory ? `Победа!` : `Поражение`}</h2>
+      <h2 class="result__title">${curentResult.isVictory ? `Победа!` : `Поражение`}</h2>
       ${history.map((it, order) => getTable(it, order)).join(``)}
     </section>
   `;

@@ -82,10 +82,4 @@ const updateTime = (state) => {
   return Object.assign({}, state, {time: newTime});
 };
 
-
-// const startGame = (state) => {
-//
-//   renderScreen(screenGame(changeLevel(state)));
-// }
-
 export {INITIAL_GAME, changeLevel, reapLife, updateTime, checkAnswer};
