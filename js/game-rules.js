@@ -5,18 +5,42 @@ const GameSetting = {
 };
 
 const AnswerType = {
-  QUICK: `QUICK`,
+  FAST: `FAST`,
   SLOW: `SLOW`,
-  NORMAL: `NORMAL`,
+  WRONG: `WRONG`,
+  CORRECT: `CORRECT`,
+};
+
+const TimeLine = {
+  [AnswerType.FAST]: 10,
+  [AnswerType.SLOW]: 20
 };
 
 const ScoreBonus = {
   CORRECT: 100,
-  EXTRA_LIFE: 50,
-  [AnswerType.QUICK]: 50,
+  LIVES: 50,
+  [AnswerType.FAST]: 50,
   [AnswerType.SLOW]: -50,
-  [AnswerType.NORMAL]: 0
+  [AnswerType.WRONG]: 0
 };
 
+class UserAnswer {
+  constructor(isCorrect, time) {
+    this.time = time;
+    this.isCorrect = isCorrect;
+  }
+  get type() {
+    switch (true) {
+      case (!this.isCorrect):
+        return AnswerType.WRONG;
+      case (this.time < TimeLine.FAST):
+        return AnswerType.FAST;
+      case (this.time > TimeLine.SLOW):
+        return AnswerType.SLOW;
+      default:
+        return AnswerType.CORRECT;
+    }
+  }
+}
 
-export {GameSetting, ScoreBonus, AnswerType};
+export {GameSetting, ScoreBonus, AnswerType, UserAnswer};

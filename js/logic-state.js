@@ -1,22 +1,6 @@
 import {GameSetting} from './game-rules.js';
 
 // @param {state} object that describes current game state
-// $return new game state object with increased level property
-
-const changeLevel = (state) => {
-  if (state !== Object(state) || !state.hasOwnProperty(`level`)) {
-    throw new Error(`${state} is not an object or has no level property`);
-  }
-  if (state.level < 1 || state.level > GameSetting.MAX_LEVEL) {
-    throw new Error(`incorrect data, state object's level property should be in interval from 1 to ${GameSetting.MAX_LEVEL}`);
-  }
-
-  const newLevel = state.level === GameSetting.MAX_LEVEL ? GameSetting.MAX_LEVEL : state.level + 1;
-
-  return Object.assign({}, state, {level: newLevel});
-};
-
-// @param {state} object that describes current game state
 // $return new game state object with decreased life property
 
 const reapLife = (state) => {
@@ -50,4 +34,4 @@ const updateTime = (state) => {
   return Object.assign({}, state, {time: newTime});
 };
 
-export {changeLevel, reapLife, updateTime};
+export {reapLife, updateTime};

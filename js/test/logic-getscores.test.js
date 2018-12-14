@@ -9,7 +9,7 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
   it(`should return 1150 if all answers have been recieved not slowly and not quickly and all lives preserved`, () => {
     const testCase = new Array(GameSetting.MAX_LEVEL).fill({
       isCorrect: true,
-      type: `NORMAL`
+      type: `CORRECT`
     });
 
     assert.equal(getScores(testCase, GameSetting.INITIAL_LIVES), 1150);
@@ -19,7 +19,7 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
     const testCase = new Array(GameSetting.MAX_LEVEL)
         .fill({
           isCorrect: true,
-          type: `QUICK`
+          type: `FAST`
         });
 
     assert.equal(getScores(testCase, GameSetting.INITIAL_LIVES), 1650);
@@ -33,7 +33,7 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
         }, 0, 7)
         .fill({
           isCorrect: false,
-          type: `SLOW`
+          type: `WRONG`
         }, 7);
 
     assert.equal(getScores(testCase, 0), 350);

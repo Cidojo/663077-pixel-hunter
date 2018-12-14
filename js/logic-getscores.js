@@ -21,9 +21,10 @@ const getScores = (answers, livesAmount) => {
     return -1;
   }
 
+
   return answers.reduce((accumulator, current) => {
-    return current.isCorrect ? accumulator + ScoreBonus.CORRECT + ScoreBonus[AnswerType[current.type]] : accumulator;
-  }, livesAmount * ScoreBonus.EXTRA_LIFE);
+    return accumulator + ScoreBonus[current.type] + (current.isCorrect && current.type !== AnswerType.CORRECT ? ScoreBonus.CORRECT : 0);
+  }, livesAmount * ScoreBonus.LIVES);
 };
 
 
