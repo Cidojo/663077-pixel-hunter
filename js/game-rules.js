@@ -24,23 +24,9 @@ const ScoreBonus = {
   [AnswerType.WRONG]: 0
 };
 
-class UserAnswer {
-  constructor(isCorrect, time) {
-    this.time = time;
-    this.isCorrect = isCorrect;
-  }
-  get type() {
-    switch (true) {
-      case (!this.isCorrect):
-        return AnswerType.WRONG;
-      case (this.time < TimeLine.FAST):
-        return AnswerType.FAST;
-      case (this.time > TimeLine.SLOW):
-        return AnswerType.SLOW;
-      default:
-        return AnswerType.CORRECT;
-    }
-  }
-}
+const IMG_FRAME = {
+  width: 468,
+  height: 458
+};
 
-export {GameSetting, ScoreBonus, AnswerType, UserAnswer};
+export {GameSetting, ScoreBonus, AnswerType, TimeLine, IMG_FRAME};

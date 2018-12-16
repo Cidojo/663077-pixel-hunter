@@ -1,6 +1,6 @@
 import {createMarkupNode} from './utils.js';
 import header from './screen-header.js';
-import startGame from './screen-game.js';
+import {startGame} from './screen-game.js';
 
 export default (state) => {
   const template = `

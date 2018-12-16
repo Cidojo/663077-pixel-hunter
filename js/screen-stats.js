@@ -48,19 +48,19 @@ export const MockStats = [
 const ExtraResultKind = {
   FAST: `FAST`,
   SLOW: `SLOW`,
-  ALIVE: `LIVES`,
+  ALIVE: `LIVES`
 };
 
 const ExtraResultModifacator = {
   [ExtraResultKind.FAST]: `fast`,
   [ExtraResultKind.SLOW]: `slow`,
-  [ExtraResultKind.ALIVE]: `alive`,
+  [ExtraResultKind.ALIVE]: `alive`
 };
 
 const ExtraResultTitle = {
   [ExtraResultKind.FAST]: `Бонус за скорость`,
   [ExtraResultKind.SLOW]: `Штраф за медлительность`,
-  [ExtraResultKind.ALIVE]: `Бонус за жизни`,
+  [ExtraResultKind.ALIVE]: `Бонус за жизни`
 };
 
 class GameResult {

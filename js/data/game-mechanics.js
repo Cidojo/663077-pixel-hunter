@@ -1,6 +1,5 @@
 import {game, GameKind} from './game-data.js';
-import {GameSetting} from './../game-rules.js';
-
+import {GameSetting, AnswerType, TimeLine} from './../game-rules.js';
 
 const INITIAL_GAME = Object.freeze({
   level: 1,
@@ -11,17 +10,54 @@ const INITIAL_GAME = Object.freeze({
   game: game.random
 });
 
+class UserAnswer {
+  constructor(isCorrect, time) {
+    this.time = time;
+    this.isCorrect = isCorrect;
+  }
+  get type() {
+    switch (true) {
+      case (!this.isCorrect):
+        return AnswerType.WRONG;
+      case (this.time < TimeLine.FAST):
+        return AnswerType.FAST;
+      case (this.time > TimeLine.SLOW):
+        return AnswerType.SLOW;
+      default:
+        return AnswerType.CORRECT;
+    }
+  }
+}
+
+
+// @param {currentState} state objects
+// $result boolean, checks if there are lives left in case of wrong answer
+
+const canContinue = (currentState, answerStatus) => {
+  return currentState.level + 1 <= GameSetting.MAX_LEVEL && (answerStatus || currentState.lives - 1 >= 0);
+};
+
+
+// @param {state} current state object
+// @param {answerStatus} boolean, says is current user answer is full and correct or wrong
+// $result new state object with added user answer
+
+const updateStateAnswer = (state, answerStatus) => {
+  state.answers.push(new UserAnswer(answerStatus, state.time));
+  return Object.assign({}, state);
+};
+
 
 // @param {answers} user answers from current screen
 // @param {evt} click event
 // @param {state} current state object
 // $return null if not all answers have been recieved, else returns boolean value if correct or not
 
-const checkAnswer = (answers, evt, state) => {
+const checkAnswer = (answersNodes, evt, state) => {
   const userAnswers = state.game.kind === GameKind.FIND ?
-    [answers.indexOf(evt.currentTarget)]
+    [answersNodes.indexOf(evt.currentTarget)]
     :
-    answers.filter((element) => element.checked).map((input) => input.value);
+    answersNodes.filter((element) => element.checked).map((input) => input.value);
 
   return userAnswers.length === state.game.answers.length ?
     state.game.answers.every((gameAnswer, index) => userAnswers[index] === gameAnswer)
@@ -40,8 +76,6 @@ const changeLevel = (state) => {
   if (state.level < 1 || state.level > GameSetting.MAX_LEVEL) {
     throw new Error(`incorrect data, state object's level property should be in interval from 1 to ${GameSetting.MAX_LEVEL}`);
   }
-
-  // const newLevel = state.level === GameSetting.MAX_LEVEL ? GameSetting.MAX_LEVEL : state.level + 1;
 
   return Object.assign({}, state, {level: state.level + 1, game: game.random});
 };
@@ -82,4 +116,12 @@ const updateTime = (state) => {
   return Object.assign({}, state, {time: newTime});
 };
 
-export {INITIAL_GAME, changeLevel, reapLife, updateTime, checkAnswer};
+
+const updateState = (state, answerStatus) => {
+  const newState = updateStateAnswer(state, answerStatus);
+
+  return changeLevel(answerStatus ? newState : reapLife(newState));
+};
+
+
+export {INITIAL_GAME, updateTime, updateState, checkAnswer, canContinue, changeLevel, reapLife};

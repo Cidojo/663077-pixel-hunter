@@ -1,13 +1,12 @@
-import {createMarkupNode} from './utils.js';
+import {createMarkupNode, resizeImg} from './utils.js';
 import header from './screen-header.js';
 import stats from './game-stats-footer.js';
-import {checkAnswer, reapLife} from './data/game-mechanics.js';
 import {GameKind} from './data/game-data.js';
-import {changeLevel} from './data/game-mechanics.js';
+import {canContinue, updateState, checkAnswer} from './data/game-mechanics.js';
 import renderScreen from './render-screen.js';
 import {screenStats, MockStats} from './screen-stats.js';
-import {UserAnswer} from './game-rules.js';
 
+import {IMG_FRAME} from './game-rules.js';
 import {INITIAL_GAME} from './data/game-mechanics.js';
 
 const screenGame = (state) => {
@@ -26,7 +25,7 @@ const screenGame = (state) => {
     [...state.game.options].map((option, order) => {
       return `
       <div class="game__option">
-        <img src="${option.source}" alt="Option ${order + 1}" width="468" height="458">
+        <img src="${option.image.source}" alt="Option ${order + 1}" width="${resizeImg(IMG_FRAME, option.image.size).width}" height="${resizeImg(IMG_FRAME, option.image.size).height}">
         ${state.game.kind === GameKind.PICK ? pickAnswerTemplate(order) : ``}
       </div>
       `;
@@ -47,28 +46,18 @@ const screenGame = (state) => {
 
   node.insertAdjacentElement(`afterbegin`, header(state, true));
 
-  // node.querySelector(`section`).appendChild(stats(state));
-
   const answers = Array.from(node.querySelectorAll(state.game.answerSelector));
 
   answers.forEach((it) => {
     it.addEventListener(`click`, (evt) => {
-      const canContinue = (currentState) => {
-        return !(currentState.lives - 1 < 0);
-      };
-      const isLast = (currentState) => {
-        return currentState.level + 1 > 10;
-      };
-
       const isCorrect = checkAnswer(answers, evt, state);
 
       if (isCorrect !== null) {
-        state.answers.push(new UserAnswer(isCorrect, state.time));
-
-        const next = isLast(state) || (!isCorrect && !canContinue(state)) ?
-          screenStats(state, MockStats)
+        const newState = updateState(state, isCorrect);
+        const next = canContinue(state, isCorrect) ?
+          screenGame(newState)
           :
-          screenGame(changeLevel(isCorrect ? state : reapLife(state)));
+          screenStats(newState, MockStats);
 
         renderScreen(next);
       }
@@ -83,4 +72,4 @@ const startGame = () => {
   renderScreen(screenGame(Object.assign({}, INITIAL_GAME)));
 };
 
-export default startGame;
+export {startGame, screenGame};

@@ -5,7 +5,7 @@ const GameKind = {
   FIND: `find`
 };
 
-const IMG_TYPE = {
+const ImgType = {
   PHOTO: `photo`,
   PAINT: `paint`
 };
@@ -16,12 +16,24 @@ const game = {
     task: `Угадайте для каждого изображения фото или рисунок?`,
     options: [
       {
-        source: `https://k42.kn3.net/CF42609C8.jpg`,
-        type: IMG_TYPE.PHOTO
+        image: {
+          source: `https://k42.kn3.net/CF42609C8.jpg`,
+          size: {
+            width: 600,
+            height: 831
+          }
+        },
+        type: ImgType.PHOTO
       },
       {
-        source: `http://i.imgur.com/1KegWPz.jpg`,
-        type: IMG_TYPE.PHOTO
+        image: {
+          source: `http://i.imgur.com/1KegWPz.jpg`,
+          size: {
+            width: 1080,
+            height: 720
+          }
+        },
+        type: ImgType.PHOTO
       }
     ],
     answerSelector: `.game__answer input`,
@@ -35,8 +47,14 @@ const game = {
     task: `Угадай, фото или рисунок?`,
     options: [
       {
-        source: `https://k42.kn3.net/CF42609C8.jpg`,
-        type: IMG_TYPE.PHOTO
+        image: {
+          source: `https://k42.kn3.net/CF42609C8.jpg`,
+          size: {
+            width: 600,
+            height: 831
+          }
+        },
+        type: ImgType.PHOTO
       }
     ],
     answerSelector: `.game__answer input`,
@@ -50,22 +68,40 @@ const game = {
     task: `Найдите рисунок среди изображений`,
     options: [
       {
-        source: `https://k42.kn3.net/CF42609C8.jpg`,
-        type: IMG_TYPE.PHOTO
+        image: {
+          source: `https://k42.kn3.net/CF42609C8.jpg`,
+          size: {
+            width: 600,
+            height: 831
+          }
+        },
+        type: ImgType.PHOTO
       },
       {
-        source: `http://i.imgur.com/1KegWPz.jpg`,
-        type: IMG_TYPE.PHOTO
+        image: {
+          source: `http://i.imgur.com/1KegWPz.jpg`,
+          size: {
+            width: 1080,
+            height: 720
+          }
+        },
+        type: ImgType.PHOTO
       },
       {
-        source: `http://i.imgur.com/DKR1HtB.jpg`,
-        type: IMG_TYPE.PAINT
+        image: {
+          source: `http://i.imgur.com/DKR1HtB.jpg`,
+          size: {
+            width: 1120,
+            height: 2965
+          }
+        },
+        type: ImgType.PAINT
       }
     ],
     answerSelector: `.game__option`,
 
     get answers() {
-      return [this.options.map((it) => it.type).indexOf(IMG_TYPE.PAINT)];
+      return [this.options.map((it) => it.type).indexOf(ImgType.PAINT)];
     }
   },
 
