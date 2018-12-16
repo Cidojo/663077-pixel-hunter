@@ -26,13 +26,7 @@ export const resizeImg = (frame, given) => {
     .sort((current, next) => next.pop() - current.pop())
     .map((it) => it.shift());
 
-  const frameBase = given[base] === given[heep] ?
-    Object.entries(frame)
-      .reduce((current, next) => current.pop() <= next.pop() ? current : next)
-      .pop()
-    : base;
+  const multiplier = frame[base] / given[base] < frame[heep] / given[heep] ? frame[base] / given[base] : frame[heep] / given[heep];
 
-  const multiplier = frame[frameBase] / given[base];
-
-  return {[base]: frame[frameBase], [heep]: given[heep] * multiplier};
+  return {[base]: given[base] * multiplier, [heep]: given[heep] * multiplier};
 };
