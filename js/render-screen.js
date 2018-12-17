@@ -10,6 +10,5 @@ export default (node) => {
   node.id = mainId;
 
   body.replaceChild(node, main);
-
   main = node;
 };

@@ -1,18 +1,12 @@
-import {createMarkupNode} from './utils.js';
+import show from './render-screen.js';
 import screenGreeting from './screen-greeting.js';
-import renderScreen from './render-screen.js';
+import ScreenIntroView from './screen-intro-view.js';
 
-export default (state) => {
-  const template = `
-  <section class="intro">
-    <button class="intro__asterisk asterisk" type="button"><span class="visually-hidden">Продолжить</span>*</button>
-    <p class="intro__motto"><sup>*</sup> Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.</p>
-  </section>
-`;
+export default () => {
 
-  const node = createMarkupNode(template);
+  const node = new ScreenIntroView();
 
-  node.querySelector(`.intro__asterisk`).addEventListener(`click`, () => renderScreen(screenGreeting(state)));
+  node.onNext = () => show(screenGreeting().element);
 
   return node;
 };
