@@ -54,6 +54,7 @@ const updateStateAnswer = (state, answerStatus) => {
 // $return null if not all answers have been recieved, else returns boolean value if correct or not
 
 const checkAnswer = (answersNodes, evt, state) => {
+
   const userAnswers = state.game.kind === GameKind.FIND ?
     [answersNodes.indexOf(evt.currentTarget)]
     :
