@@ -1,4 +1,4 @@
-import show from './render-screen.js';
+import {show} from './utils.js';
 import screenGreeting from './screen-greeting.js';
 import ScreenHeaderView from './screen-header-view.js';
 

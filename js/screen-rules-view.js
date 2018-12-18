@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view.js';
 
-const InteractiveElementClass = {
+const InteractiveElementSelector = {
   INPUT: `.rules__input`,
   FORM: `.rules__form`,
   START_BUTTON: `.rules__button`
@@ -33,9 +33,9 @@ export default class ScreenRulesView extends AbstractView {
   }
 
   bind(screen) {
-    const nameInputField = screen.querySelector(InteractiveElementClass.INPUT);
-    const userDataForm = screen.querySelector(InteractiveElementClass.FORM);
-    const gameStartButton = screen.querySelector(InteractiveElementClass.START_BUTTON);
+    const nameInputField = screen.querySelector(InteractiveElementSelector.INPUT);
+    const userDataForm = screen.querySelector(InteractiveElementSelector.FORM);
+    const gameStartButton = screen.querySelector(InteractiveElementSelector.START_BUTTON);
 
     userDataForm.addEventListener(`submit`, (evt) => {
       evt.stopPropagation();

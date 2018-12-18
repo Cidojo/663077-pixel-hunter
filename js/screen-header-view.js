@@ -3,11 +3,12 @@ import {GameSetting} from './game-rules.js';
 
 
 const domContainer = {
-  TAG: `header`,
-  CLASS_LIST: [`header`]
+  tagName: `header`,
+  id: null,
+  classList: [`header`]
 };
 
-const homeScreenButtonClass = `.back`;
+const HOME_SCREEN_BUTTON_CLASS = `.back`;
 
 export default class ScreenHeaderView extends AbstractView {
   constructor(state) {
@@ -43,7 +44,7 @@ export default class ScreenHeaderView extends AbstractView {
   }
 
   bind(screen) {
-    const homeScreenButton = screen.querySelector(homeScreenButtonClass);
+    const homeScreenButton = screen.querySelector(HOME_SCREEN_BUTTON_CLASS);
 
     homeScreenButton.addEventListener(`click`, (evt) => {
       evt.stopPropagation();

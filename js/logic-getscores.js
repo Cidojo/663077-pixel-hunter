@@ -13,11 +13,11 @@ const getScores = (answers, livesAmount) => {
     throw new Error(`the lives parameter should be a number`);
   }
 
-  if (livesAmount > GameSetting.INITIAL_LIVES || livesAmount < 0) {
-    throw new Error(`the lives must not exceed an interval from 0 to ${GameSetting.INITIAL_LIVES}`);
+  if (livesAmount > GameSetting.INITIAL_LIVES) {
+    throw new Error(`the lives can't be higher than ${GameSetting.INITIAL_LIVES}`);
   }
 
-  if (answers.length !== GameSetting.MAX_LEVEL) {
+  if (answers.length !== GameSetting.MAX_LEVEL || livesAmount < 0) {
     return -1;
   }
 

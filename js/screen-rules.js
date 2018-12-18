@@ -1,6 +1,6 @@
 import header from './screen-header.js';
 import screenGame from './screen-game.js';
-import show from './render-screen.js';
+import {show} from './utils.js';
 import {INITIAL_GAME} from './data/game-mechanics.js';
 import ScreenRulesView from './screen-rules-view.js';
 

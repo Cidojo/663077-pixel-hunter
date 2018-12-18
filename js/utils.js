@@ -1,3 +1,18 @@
+const body = document.querySelector(`body`);
+let main = body.querySelector(`#main`);
+const mainId = main.id;
+
+// @param {template} screen node to render
+// $result adds pointed node to #main
+
+export const show = (node) => {
+  main.id = ``;
+  node.id = mainId;
+
+  body.replaceChild(node, main);
+  main = node;
+};
+
 // @param {max} set maximum random value. max is not included
 // $return random number from [0 to max);
 

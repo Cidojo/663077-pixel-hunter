@@ -44,12 +44,14 @@ export default class ScreenGreetingView extends AbstractView {
     `;
   }
 
-  bind(screen) {
-    const answers = Array.from(screen.querySelectorAll(this.state.game.answerSelector));
+  get answers() {
+    return Array.from(this.element.querySelectorAll(this.state.game.answerSelector));
+  }
 
-    answers.forEach((it) => {
+  bind() {
+    this.answers.forEach((it) => {
       it.addEventListener(`click`, (evt) => {
-        this.onNext(answers, evt, this.state);
+        this.onNext(this.answers, evt, this.state);
       });
     });
   }
