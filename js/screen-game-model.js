@@ -1,7 +1,7 @@
-import {INITIAL_GAME, updateTime, updateState, checkAnswer, canContinue, changeLevel, reapLife} from './data/game-mechanics.js';
+import {INITIAL_GAME, changeLevel, reapLife} from './data/game-mechanics.js';
 
 
-class GameModel {
+export default class GameModel {
   constructor(playerName) {
     this.playerName = playerName;
     this.restart();
@@ -9,6 +9,10 @@ class GameModel {
 
   get state() {
     return Object.freeze(this._state);
+  }
+
+  get currentLevel() {
+    return this._state.level;
   }
 
   hasNextLevel() {
@@ -19,6 +23,10 @@ class GameModel {
     }
 
     return true;
+  }
+
+  addUserAnswer(answer) {
+    this._state.answers.push(answer);
   }
 
   canContinue() {
@@ -41,7 +49,7 @@ class GameModel {
     return this._state.lives - 1 <= 0;
   }
 
-  tick() {
-    this._state = tick(this._state);
-  }
-};
+  // _tick() {
+  //   this._state = tick(this._state);
+  // }
+}

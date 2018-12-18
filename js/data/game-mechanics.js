@@ -2,7 +2,7 @@ import {game, GameKind} from './game-data.js';
 import {GameSetting, AnswerType, TimeLine} from './../game-rules.js';
 
 const INITIAL_GAME = Object.freeze({
-  level: 1,
+  level: 0,
   type: 0,
   lives: GameSetting.INITIAL_LIVES,
   answers: [],
@@ -53,17 +53,12 @@ const updateStateAnswer = (state, answerStatus) => {
 // @param {state} current state object
 // $return null if not all answers have been recieved, else returns boolean value if correct or not
 
-const checkAnswer = (answersNodes, evt, state) => {
+const getUserAnswers = (possibleAnswers, userAnswer, state) => {
 
-  const userAnswers = state.game.kind === GameKind.FIND ?
-    [answersNodes.indexOf(evt.currentTarget)]
+  return state.game.kind === GameKind.FIND ?
+    [possibleAnswers.indexOf(userAnswer)]
     :
-    answersNodes.filter((element) => element.checked).map((input) => input.value);
-
-  return userAnswers.length === state.game.answers.length ?
-    state.game.answers.every((gameAnswer, index) => userAnswers[index] === gameAnswer)
-    :
-    null;
+    possibleAnswers.filter((element) => element.checked).map((input) => input.value);
 };
 
 
@@ -74,7 +69,7 @@ const changeLevel = (state) => {
   if (state !== Object(state) || !state.hasOwnProperty(`level`)) {
     throw new Error(`${state} is not an object or has no level property`);
   }
-  if (state.level < 1 || state.level > GameSetting.MAX_LEVEL) {
+  if (state.level < 0 || state.level > GameSetting.MAX_LEVEL) {
     throw new Error(`incorrect data, state object's level property should be in interval from 1 to ${GameSetting.MAX_LEVEL}`);
   }
 
@@ -125,4 +120,4 @@ const updateState = (state, answerStatus) => {
 };
 
 
-export {INITIAL_GAME, updateTime, updateState, checkAnswer, canContinue, changeLevel, reapLife};
+export {INITIAL_GAME, updateTime, updateState, getUserAnswers, canContinue, changeLevel, reapLife};

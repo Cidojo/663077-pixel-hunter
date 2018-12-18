@@ -51,11 +51,13 @@ export default class ScreenGreetingView extends AbstractView {
   bind() {
     this.answers.forEach((it) => {
       it.addEventListener(`click`, (evt) => {
-        this.onNext(this.answers, evt, this.state);
+        this.onAnswer(evt.currentTarget);
       });
     });
   }
 
   onNext() {
+  }
+  onAnswer() {
   }
 }
