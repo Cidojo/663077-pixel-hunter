@@ -1,4 +1,4 @@
-import {game, GameKind} from './game-data.js';
+import {game} from './game-data.js';
 import {GameSetting, AnswerType, TimeLine} from './../game-rules.js';
 
 const INITIAL_GAME = Object.freeze({
@@ -10,24 +10,26 @@ const INITIAL_GAME = Object.freeze({
   game: game.random
 });
 
-class UserAnswer {
-  constructor(isCorrect, time) {
-    this.time = time;
-    this.isCorrect = isCorrect;
-  }
-  get type() {
+const createUserAnswer = (answerStatus, time) => {
+  const getAnswerType = () => {
     switch (true) {
-      case (!this.isCorrect):
+      case (!answerStatus):
         return AnswerType.WRONG;
-      case (this.time > TimeLine.FAST):
+      case (time > TimeLine.FAST):
         return AnswerType.FAST;
-      case (this.time < TimeLine.SLOW):
+      case (time < TimeLine.SLOW):
         return AnswerType.SLOW;
       default:
         return AnswerType.CORRECT;
     }
-  }
-}
+  };
+
+  return {
+    isCorrect: answerStatus,
+    time,
+    type: getAnswerType()
+  };
+};
 
 
 // @param {currentState} state objects
@@ -38,30 +40,6 @@ const canContinue = (currentState, answerStatus) => {
 };
 
 
-// @param {state} current state object
-// @param {answerStatus} boolean, says is current user answer is full and correct or wrong
-// $result new state object with added user answer
-
-const updateStateAnswer = (state, answerStatus) => {
-  state.answers.push(new UserAnswer(answerStatus, state.time));
-  return Object.assign({}, state);
-};
-
-
-// @param {answers} user answers from current screen
-// @param {evt} click event
-// @param {state} current state object
-// $return null if not all answers have been recieved, else returns boolean value if correct or not
-
-const getUserAnswers = (possibleAnswers, userAnswer, state) => {
-
-  return state.game.kind === GameKind.FIND ?
-    [possibleAnswers.indexOf(userAnswer)]
-    :
-    possibleAnswers.filter((element) => element.checked).map((input) => input.value);
-};
-
-
 // @param {state} object that describes current game state
 // $return new game state object with increased level property
 
@@ -69,8 +47,8 @@ const changeLevel = (state) => {
   if (state !== Object(state) || !state.hasOwnProperty(`level`)) {
     throw new Error(`${state} is not an object or has no level property`);
   }
-  if (state.level < 0 || state.level > GameSetting.MAX_LEVEL) {
-    throw new Error(`incorrect data, state object's level property should be in interval from 1 to ${GameSetting.MAX_LEVEL}`);
+  if (state.level < 0 || state.level >= GameSetting.MAX_LEVEL) {
+    throw new Error(`incorrect data, state object's level property should be in interval from 1 to ${GameSetting.MAX_LEVEL - 1}`);
   }
 
   return Object.assign({}, state, {level: state.level + 1, game: game.random});
@@ -113,11 +91,4 @@ const updateTime = (state) => {
 };
 
 
-const updateState = (state, answerStatus) => {
-  const newState = updateStateAnswer(state, answerStatus);
-
-  return changeLevel(answerStatus ? newState : reapLife(newState));
-};
-
-
-export {INITIAL_GAME, updateTime, updateState, getUserAnswers, canContinue, changeLevel, reapLife};
+export {INITIAL_GAME, updateTime, canContinue, changeLevel, reapLife, createUserAnswer};

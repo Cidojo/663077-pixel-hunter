@@ -1,11 +1,10 @@
 // import header from './screen-header.js';
-import {canContinue} from './data/game-mechanics.js';
-import {TimeLine, AnswerType} from './game-rules.js';
+import {createUserAnswer} from './data/game-mechanics.js';
 import {show} from './utils.js';
 import screenStats from './screen-stats.js';
 import ScreenGameView from './screen-game-view.js';
 import {GameKind} from './data/game-data.js';
-import {startTimer, stopTimer} from './timer.js';
+import {stopTimer} from './timer.js';
 import ScreenHeader from './screen-header.js';
 
 
@@ -55,7 +54,11 @@ class ScreenGame {
     this.model.tick();
     this.updateHeader();
 
-    this._timer = setTimeout(() => this._tick(), 1000);
+    if (this.model.state.time === 0) {
+      this.onTimeout();
+    } else {
+      this._timer = setTimeout(() => this._tick(), 1000);
+    }
   }
 
   startGame() {
@@ -73,7 +76,7 @@ class ScreenGame {
       const isCorrect = checkUserAnswer(getUserAnswers(this.root.answers, userAnswer, this.model.state), this.model.state.game.answers);
 
       if (isCorrect !== null) {
-        this.answer(new UserAnswer(isCorrect, this.model.state.time));
+        this.answer(createUserAnswer(isCorrect, this.model.state.time));
       }
     };
   }
@@ -89,35 +92,19 @@ class ScreenGame {
     if (answer !== null) {
       this.stopGame();
       this.model.addUserAnswer(answer);
-      if (canContinue(this.model.state, answer.isCorrect)) {
-        if (!answer.isCorrect) {
-          this.model.reapLife();
-        }
+      if (!answer.isCorrect) {
+        this.model.reapLife();
+      }
+      if (this.model.canContinue()) {
         this.startGame();
       } else {
         show(screenStats(this.model.state).element);
       }
     }
   }
-}
 
-
-class UserAnswer {
-  constructor(isCorrect, time) {
-    this.time = time;
-    this.isCorrect = isCorrect;
-  }
-  get type() {
-    switch (true) {
-      case (!this.isCorrect):
-        return AnswerType.WRONG;
-      case (this.time > TimeLine.FAST):
-        return AnswerType.FAST;
-      case (this.time < TimeLine.SLOW):
-        return AnswerType.SLOW;
-      default:
-        return AnswerType.CORRECT;
-    }
+  onTimeout() {
+    this.answer(createUserAnswer(false, 0));
   }
 }
 

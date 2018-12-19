@@ -1,7 +1,17 @@
 import {GameSetting} from './game-rules.js';
 
 const tick = (state) => {
-  return Object.assign({}, state, {time: state.time - 1});
+  if (state !== Object(state) || !state.hasOwnProperty(`time`)) {
+    throw new Error(`${state} is not an object or has no time property`);
+  }
+
+  if (state.time < 0 || state.time > GameSetting.TIME_LIMIT) {
+    throw new Error(`incorrect data, state object's time property should be in interval from 0 to ${GameSetting.TIME_LIMIT}`);
+  }
+
+  const newTime = state.time === 0 ? 0 : state.time - 1;
+
+  return Object.assign({}, state, {time: newTime});
 };
 
 const startTimer = (state) => {

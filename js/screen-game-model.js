@@ -15,9 +15,13 @@ export default class GameModel {
     return this._state.level;
   }
 
+  get lastUserAnswer() {
+    return this._state.answers[this._state.answers.length - 1];
+  }
+
   hasNextLevel() {
     try {
-      changeLevel(this._state.level + 1);
+      changeLevel(this._state);
     } catch (error) {
       return false;
     }
@@ -30,7 +34,8 @@ export default class GameModel {
   }
 
   canContinue() {
-    // return this.hasNextLevel() && this.
+    // debugger
+    return this.hasNextLevel() && (this.lastUserAnswer.isCorrect || this._state.lives !== 0);
   }
 
   nextLevel() {
