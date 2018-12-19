@@ -32,6 +32,10 @@ export default class ScreenRulesView extends AbstractView {
     `;
   }
 
+  addHeader(header) {
+    this.element.insertAdjacentElement(`afterbegin`, header);
+  }
+
   bind(screen) {
     const nameInputField = screen.querySelector(InteractiveElementSelector.INPUT);
     const userDataForm = screen.querySelector(InteractiveElementSelector.FORM);

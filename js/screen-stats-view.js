@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view.js';
 import {AnswerType, ScoreBonus, GameSetting} from './game-rules.js';
-import stats from './game-stats-footer.js';
+import ScreenStatsBar from './screen-stats-bar.js';
 import getScores from './logic-getscores.js';
 
 

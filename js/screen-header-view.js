@@ -49,10 +49,10 @@ export default class ScreenHeaderView extends AbstractView {
     homeScreenButton.addEventListener(`click`, (evt) => {
       evt.stopPropagation();
       evt.preventDefault();
-      this.showHomeScreen();
+      this.goHome();
     });
   }
 
-  showHomeScreen() {
+  goHome() {
   }
 }

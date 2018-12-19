@@ -2,12 +2,18 @@ import AbstractView from './abstract-view.js';
 import {GameKind} from './data/game-data.js';
 import {IMG_FRAME} from './game-rules.js';
 import {resizeImg} from './utils.js';
-import stats from './game-stats-footer.js';
+import ScreenHeader from './screen-header.js';
+import ScreenStatsBar from './screen-stats-bar.js';
 
 export default class ScreenGreetingView extends AbstractView {
   constructor(state) {
     super();
     this.state = state;
+    this.header = new ScreenHeader(this.state);
+    this.statsBar = new ScreenStatsBar(this.state);
+
+    this.addHeader(this.header.element);
+    this.addFooter(this.statsBar.element);
   }
 
   get template() {
@@ -39,13 +45,32 @@ export default class ScreenGreetingView extends AbstractView {
         <form class="game__content">
         ${optionsTemplate(this.state.game)}
         </form>
-        ${stats(this.state)}
       </section>
     `;
   }
 
+  updateState(updatedState) {
+    this.state = updatedState;
+  }
+
   get answers() {
     return Array.from(this.element.querySelectorAll(this.state.game.answerSelector));
+  }
+
+  addHeader(header) {
+    this.element.insertAdjacentElement(`afterbegin`, header);
+  }
+
+  addFooter(statsBar) {
+    this.element.lastChild.appendChild(statsBar);
+  }
+
+  updateHeader(state) {
+    this.updateState(state);
+
+    const header = new ScreenHeader(this.state);
+    this.element.replaceChild(header.element, this.header.element);
+    this.header = header;
   }
 
   bind() {

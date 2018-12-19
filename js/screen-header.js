@@ -8,7 +8,7 @@ export default class ScreenHeader {
   constructor(state) {
     this.root = new ScreenHeaderView(state);
 
-    this.root.showHomeScreen = () => Application.showWelcome();
+    this.root.goHome = () => Application.showGreeting();
   }
 
   get element() {

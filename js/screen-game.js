@@ -1,11 +1,9 @@
-// import header from './screen-header.js';
 import {createUserAnswer} from './data/game-mechanics.js';
 import {show} from './utils.js';
-import screenStats from './screen-stats.js';
 import ScreenGameView from './screen-game-view.js';
+import screenStats from './screen-stats.js';
 import {GameKind} from './data/game-data.js';
 import {stopTimer} from './timer.js';
-import ScreenHeader from './screen-header.js';
 
 
 const checkUserAnswer = (userAnswers, correctAnswers) => {
@@ -32,13 +30,8 @@ const getUserAnswers = (possibleAnswers, userAnswer, state) => {
 
 class ScreenGame {
   constructor(model) {
-
     this.model = model;
-
     this.root = new ScreenGameView(this.model.state);
-    this.header = new ScreenHeader(this.model.state).element;
-    this.root.element.insertAdjacentElement(`afterbegin`, this.header);
-
     this._timer = null;
   }
 
@@ -52,7 +45,7 @@ class ScreenGame {
 
   _tick() {
     this.model.tick();
-    this.updateHeader();
+    this.root.updateHeader(this.model.state);
 
     if (this.model.state.time === 0) {
       this.onTimeout();
@@ -70,7 +63,6 @@ class ScreenGame {
   changeLevel() {
     this.model.nextLevel();
     this.root = new ScreenGameView(this.model.state);
-    this.root.element.insertAdjacentElement(`afterbegin`, this.header);
 
     this.root.onAnswer = (userAnswer) => {
       const isCorrect = checkUserAnswer(getUserAnswers(this.root.answers, userAnswer, this.model.state), this.model.state.game.answers);
@@ -79,12 +71,6 @@ class ScreenGame {
         this.answer(createUserAnswer(isCorrect, this.model.state.time));
       }
     };
-  }
-
-  updateHeader() {
-    const header = new ScreenHeader(this.model.state).element;
-    this.root.element.replaceChild(header, this.header);
-    this.header = header;
   }
 
   answer(answer) {
