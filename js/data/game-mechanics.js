@@ -6,7 +6,7 @@ const INITIAL_GAME = Object.freeze({
   type: 0,
   lives: GameSetting.INITIAL_LIVES,
   answers: [],
-  time: 21,
+  time: GameSetting.TIME_LIMIT,
   game: game.random
 });
 
@@ -19,9 +19,9 @@ class UserAnswer {
     switch (true) {
       case (!this.isCorrect):
         return AnswerType.WRONG;
-      case (this.time < TimeLine.FAST):
+      case (this.time > TimeLine.FAST):
         return AnswerType.FAST;
-      case (this.time > TimeLine.SLOW):
+      case (this.time < TimeLine.SLOW):
         return AnswerType.SLOW;
       default:
         return AnswerType.CORRECT;

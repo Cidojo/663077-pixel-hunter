@@ -1,12 +1,16 @@
 import {show} from './utils.js';
-import screenGreeting from './screen-greeting.js';
+import ScreenGreeting from './screen-greeting.js';
 import ScreenIntroView from './screen-intro-view.js';
 
-export default () => {
+export default class ScreenIntro {
+  constructor() {
+    this.root = new ScreenIntroView();
+    this.next = new ScreenGreeting();
 
-  const node = new ScreenIntroView();
+    this.root.onNext = () => show(this.next.element);
+  }
 
-  node.onNext = () => show(screenGreeting().element);
-
-  return node;
-};
+  get element() {
+    return this.root.element;
+  }
+}

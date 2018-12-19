@@ -1,4 +1,4 @@
-import header from './screen-header.js';
+import ScreenHeader from './screen-header.js';
 import ScreenStatsView from './screen-stats-view.js';
 import {GameSetting} from './game-rules.js';
 
@@ -45,7 +45,7 @@ const MockStats = [
 
 export default (state, history = MockStats) => {
   const node = new ScreenStatsView(state, history);
-  node.element.insertAdjacentElement(`afterbegin`, header().element);
+  node.element.insertAdjacentElement(`afterbegin`, new ScreenHeader().element);
 
   return node;
 };

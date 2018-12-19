@@ -1,14 +1,16 @@
-import header from './screen-header.js';
-import screenGame from './screen-game.js';
-// import {show} from './utils.js';
-// import {INITIAL_GAME} from './data/game-mechanics.js';
+import ScreenHeader from './screen-header.js';
+import Application from './application.js';
 import ScreenRulesView from './screen-rules-view.js';
 
-export default () => {
-  const node = new ScreenRulesView();
-  node.element.insertAdjacentElement(`afterbegin`, header().element);
+export default class ScreenRules {
+  constructor() {
+    this.root = new ScreenRulesView();
+    this.header = new ScreenHeader();
+    this.root.element.insertAdjacentElement(`afterbegin`, this.header.element);
+    this.root.onNext = () => Application.showGame(`cid`);
+  }
 
-  node.onNext = () => screenGame.startGame();
-
-  return node;
-};
+  get element() {
+    return this.root.element;
+  }
+}

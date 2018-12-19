@@ -1,14 +1,21 @@
-import {show} from './utils.js';
-import screenGreeting from './screen-greeting.js';
 import ScreenHeaderView from './screen-header-view.js';
+import Application from './application.js';
 
 // @param {state} current state Object
 // @result header node
 
-export default (state) => {
-  const node = new ScreenHeaderView(state);
+export default class ScreenHeader {
+  constructor(state) {
+    this.root = new ScreenHeaderView(state);
 
-  node.showHomeScreen = () => show(screenGreeting().element);
+    this.root.showHomeScreen = () => Application.showWelcome();
+  }
 
-  return node;
-};
+  get element() {
+    return this.root.element;
+  }
+
+  update(state) {
+    this.root = new ScreenHeaderView(state);
+  }
+}

@@ -1,4 +1,4 @@
-import {show} from './utils.js';
-import screenIntro from './screen-intro.js';
+// import screenIntro from './screen-intro.js';
+import Application from './application.js';
 
-show(screenIntro().element);
+Application.showWelcome();
