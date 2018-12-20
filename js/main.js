@@ -1,4 +1,3 @@
-import show from './render-screen.js';
-import screenIntro from './screen-intro.js';
+import Application from './application.js';
 
-show(screenIntro().element);
+Application.showGreeting();

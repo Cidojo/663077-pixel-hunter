@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import getScores from './../logic-getscores.js';
+import getScores from './../getscores.js';
 import {GameSetting} from './../game-rules.js';
 
 describe(`Testing getScores() - function calculates scores at the end of the game`, () => {
@@ -49,9 +49,8 @@ describe(`Testing getScores() - function calculates scores at the end of the gam
     assert.equal(-1, getScores([{}, {}], 0));
   });
 
-  it(`the lives must not exceed an interval from 0 to ${GameSetting.INITIAL_LIVES}`, () => {
-    assert.throws(() => getScores([], -1), /the lives must not exceed an interval from 0 to 3/);
-    assert.throws(() => getScores([], 100), /the lives must not exceed an interval from 0 to 3/);
+  it(`the lives can't be higher than ${GameSetting.INITIAL_LIVES}`, () => {
+    assert.throws(() => getScores([], 4), /the lives can't be higher than 3/);
   });
 
   // invalid data

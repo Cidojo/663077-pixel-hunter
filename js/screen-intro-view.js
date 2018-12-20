@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view.js';
 
-const nextButtonClass = `.intro__asterisk`;
+const NEXT_BUTTON_CLASS = `.intro__asterisk`;
 
 export default class ScreenIntroView extends AbstractView {
   constructor() {
@@ -17,7 +17,7 @@ export default class ScreenIntroView extends AbstractView {
   }
 
   bind(screen) {
-    screen.querySelector(nextButtonClass).addEventListener(`click`, (evt) => {
+    screen.querySelector(NEXT_BUTTON_CLASS).addEventListener(`click`, (evt) => {
       evt.stopPropagation();
       evt.preventDefault();
       this.onNext();

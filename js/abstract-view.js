@@ -1,16 +1,20 @@
 const domContainer = {
-  TAG: `main`,
-  ID: document.querySelector(`#main`).id,
-  CLASS_LIST: [`central`]
+  tagName: `main`,
+  id: document.querySelector(`#main`).id,
+  classList: [`central`]
 };
 
 
 const render = (html, containerOption) => {
-  const container = document.createElement(containerOption.TAG);
-  if (containerOption.ID) {
-    container.id = containerOption.ID;
+  const container = document.createElement(containerOption.tagName);
+  if (containerOption.id !== null) {
+    container.id = containerOption.id;
   }
-  container.classList.add([...containerOption.CLASS_LIST]);
+
+  if (containerOption.classList !== null) {
+    container.classList.add(...containerOption.classList);
+  }
+
   container.innerHTML = html.trim();
 
   return container;

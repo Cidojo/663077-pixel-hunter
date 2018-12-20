@@ -1,30 +1,85 @@
-import header from './screen-header.js';
-import {canContinue, updateState, checkAnswer} from './data/game-mechanics.js';
-import show from './render-screen.js';
-import screenStats from './screen-stats.js';
+import {createUserAnswer, getUserAnswers, checkUserAnswer} from './data/game-mechanics.js';
+import show from './show.js';
 import ScreenGameView from './screen-game-view.js';
+import {stopTimer} from './timer.js';
+import Application from './application.js';
 
-const screenGame = (state) => {
 
-  const node = new ScreenGameView(state);
+class ScreenGame {
+  constructor(model) {
+    this.model = model;
+    this._timer = null;
+    this.init();
+  }
 
-  node.element.insertAdjacentElement(`afterbegin`, header(state).element);
+  get element() {
+    return this.root.element;
+  }
 
-  node.onNext = (answers, evt, currentState) => {
-    const isCorrect = checkAnswer(answers, evt, currentState);
+  stopGame() {
+    stopTimer(this._timer);
+  }
 
-    if (isCorrect !== null) {
-      const newState = updateState(currentState, isCorrect);
-      const next = canContinue(currentState, isCorrect) ?
-        screenGame(newState)
-        :
-        screenStats(newState);
+  _tick() {
+    this.model.tick();
+    this.root.updateHeader(this.model.state);
 
-      show(next.element);
+    if (this.model.state.time === 0) {
+      this.onTimeout();
+    } else {
+      this._timer = setTimeout(() => this._tick(), 1000);
     }
-  };
+  }
 
-  return node;
-};
+  init() {
+    this.root = new ScreenGameView(this.model.state);
 
-export default screenGame;
+    this.root.onHomeButtonClick = () => {
+      this.stopGame();
+      Application.showGreeting();
+    };
+
+    this.root.onAnswer = (userAnswer) => {
+      const isCorrect = checkUserAnswer(getUserAnswers(this.root.answers, userAnswer, this.model.state), this.model.state.game.answers);
+
+      if (isCorrect !== null) {
+        this.answer(createUserAnswer(isCorrect, this.model.state.time));
+      }
+    };
+  }
+
+  startGame() {
+    this.model.nextLevel();
+
+    this.init();
+    show(this.root.element);
+    this._tick();
+  }
+
+  answer(answer) {
+
+    if (answer !== null) {
+      this.stopGame();
+      this.model.addUserAnswer(answer);
+
+      const canContinue = this.model.canContinue();
+
+      if (!answer.isCorrect) {
+        this.model.reapLife();
+      }
+
+      if (canContinue) {
+        this.startGame();
+      } else {
+        Application.showStats(this.model.state);
+      }
+    }
+  }
+
+  onTimeout() {
+    this.answer(createUserAnswer(false, 0));
+  }
+}
+
+
+export default ScreenGame;

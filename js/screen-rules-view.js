@@ -1,6 +1,9 @@
 import AbstractView from './abstract-view.js';
+import ScreenHeaderView from './screen-header-view.js';
+import Application from './application.js';
 
-const InteractiveElementClass = {
+
+const InteractiveElementSelector = {
   INPUT: `.rules__input`,
   FORM: `.rules__form`,
   START_BUTTON: `.rules__button`
@@ -9,6 +12,9 @@ const InteractiveElementClass = {
 export default class ScreenRulesView extends AbstractView {
   constructor() {
     super();
+    this.header = new ScreenHeaderView();
+    this.header.goHome = () => Application.showGreeting();
+    this.addHeader(this.header.element);
   }
 
   get template() {
@@ -32,10 +38,14 @@ export default class ScreenRulesView extends AbstractView {
     `;
   }
 
+  addHeader(header) {
+    this.element.insertAdjacentElement(`afterbegin`, header);
+  }
+
   bind(screen) {
-    const nameInputField = screen.querySelector(InteractiveElementClass.INPUT);
-    const userDataForm = screen.querySelector(InteractiveElementClass.FORM);
-    const gameStartButton = screen.querySelector(InteractiveElementClass.START_BUTTON);
+    const nameInputField = screen.querySelector(InteractiveElementSelector.INPUT);
+    const userDataForm = screen.querySelector(InteractiveElementSelector.FORM);
+    const gameStartButton = screen.querySelector(InteractiveElementSelector.START_BUTTON);
 
     userDataForm.addEventListener(`submit`, (evt) => {
       evt.stopPropagation();

@@ -1,7 +1,9 @@
 import AbstractView from './abstract-view.js';
+import Application from './application.js';
 import {AnswerType, ScoreBonus, GameSetting} from './game-rules.js';
-import stats from './game-stats-footer.js';
-import getScores from './logic-getscores.js';
+import ScreenStatsBarView from './screen-stats-bar-view.js';
+import getScores from './getscores.js';
+import ScreenHeaderView from './screen-header-view.js';
 
 
 const ExtraResultKind = {
@@ -24,16 +26,18 @@ const ExtraResultTitle = {
   [ExtraResultKind.ALIVE]: `Бонус за жизни`
 };
 
+
 class GameResult {
-  constructor(game) {
-    this.game = game;
-    this.livesAmount = game.lives;
-    this.correctAmount = game.answers.filter((it) => it.isCorrect).length;
-    this.fastAmount = game.answers.filter((it) => it.type === AnswerType.FAST).length;
-    this.slowAmount = game.answers.filter((it) => it.type === AnswerType.SLOW).length;
+  constructor(resultState) {
+    this.game = resultState;
+    this.livesAmount = resultState.lives;
+    this.correctAmount = resultState.answers.filter((it) => it.isCorrect).length;
+    this.fastAmount = resultState.answers.filter((it) => it.type === AnswerType.FAST).length;
+    this.slowAmount = resultState.answers.filter((it) => it.type === AnswerType.SLOW).length;
     this.isVictory = this.correctAmount >= GameSetting.MAX_LEVEL - GameSetting.INITIAL_LIVES;
-    this.totalScores = getScores(game.answers, game.lives);
+    this.totalScores = getScores(resultState.answers, resultState.lives);
   }
+
   get extraResults() {
     const extra = [];
     if (this.fastAmount) {
@@ -49,6 +53,7 @@ class GameResult {
     return extra;
   }
 }
+
 
 class Extra {
   constructor(extraResultKind, result) {
@@ -72,69 +77,81 @@ class Extra {
   }
 }
 
-class GameResultView {
-  constructor(model, order) {
-    this.model = model;
+
+const domContainer = {
+  tagName: `table`,
+  id: null,
+  classList: [`result__table`]
+};
+
+class ResultTable extends AbstractView {
+  constructor(resultState, order) {
+    super();
+    this.resultState = resultState;
+    this.result = new GameResult(this.resultState);
     this.order = order + 1;
+    this.statsBar = new ScreenStatsBarView(resultState);
+    this.render = this.render.bind(this, domContainer);
   }
 
   get template() {
-    const lostResult = (model) => `
+    const lostResult = () => `
         <tr>
           <td class="result__number">${this.order}.</td>
-          <td>${stats(model.game)}</td>
+          <td>
+            <ul class="stats">${this.statsBar.template}</ul>
+          </td>
           <td class="result__total"></td>
           <td class="result__total  result__total--final">fail</td>
         </tr>
     `;
 
-    const winResult = (model) => `
+    const winResult = () => `
         <tr>
           <td class="result__number">${this.order}.</td>
-          <td ${model.extraResults.length ? `colspan="2"` : ``}>${stats(model.game)}</td>
+          <td ${this.result.extraResults.length ? `colspan="2"` : ``}>
+            <ul class="stats">${this.statsBar.template}</ul>
+          </td>
           <td class="result__points">× ${ScoreBonus.CORRECT}</td>
-          <td class="result__total ${model.extraResults.length ? `` : `result__total--final`}">${model.correctAmount * ScoreBonus.CORRECT}</td>
+          <td class="result__total ${this.result.extraResults.length ? `` : `result__total--final`}">${this.result.correctAmount * ScoreBonus.CORRECT}</td>
         </tr>
-        ${model.extraResults.length ? `
-          ${model.extraResults.map((it) => it.template).join(``)}
+        ${this.result.extraResults.length ? `
+          ${this.result.extraResults.map((it) => it.template).join(``)}
             <tr>
-              <td colspan="5" class="result__total  result__total--final">${model.totalScores}</td>
+              <td colspan="5" class="result__total  result__total--final">${this.result.totalScores}</td>
             </tr>` : ``}
         `;
 
-    return `
-      <table class="result__table">
-        ${this.model.isVictory ? winResult(this.model) : lostResult(this.model)}
-      </table>
-    `;
+    return this.result.isVictory ? winResult() : lostResult();
   }
 }
 
 
-const getTable = (game, order) => {
-  const result = new GameResult(game);
-
-  return new GameResultView(result, order).template;
-};
-
-
-export default class ScreenGreetingView extends AbstractView {
+export default class ScreenStatsView extends AbstractView {
   constructor(state, history) {
     super();
     this.state = state;
     this.history = history;
+    this.history.unshift(this.state);
+    this.results = this.history.map((resultState, order) => new ResultTable(resultState, order));
+    this.header = new ScreenHeaderView();
+    this.header.goHome = () => Application.showGreeting();
+    this.addHeader(this.header.element);
   }
 
   get template() {
-    this.history.unshift(this.state);
-
-    const curentResult = new GameResult(this.state);
-
     return `
       <section class="result">
-        <h2 class="result__title">${curentResult.isVictory ? `Победа!` : `Поражение`}</h2>
-        ${this.history.map((it, order) => getTable(it, order)).join(``)}
+        <h2 class="result__title">${this.results[0].result.isVictory ? `Победа!` : `Поражение`}</h2>
       </section>
     `;
+  }
+
+  addResults() {
+    this.results.forEach((it) => this.element.appendChild(it.element));
+  }
+
+  addHeader(header) {
+    this.element.insertAdjacentElement(`afterbegin`, header);
   }
 }

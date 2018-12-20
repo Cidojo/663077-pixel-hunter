@@ -12,8 +12,8 @@ const AnswerType = {
 };
 
 const TimeLine = {
-  [AnswerType.FAST]: 10,
-  [AnswerType.SLOW]: 20
+  [AnswerType.FAST]: 20,
+  [AnswerType.SLOW]: 10
 };
 
 const ScoreBonus = {

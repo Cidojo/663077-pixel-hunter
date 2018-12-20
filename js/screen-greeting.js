@@ -1,12 +1,13 @@
-import show from './render-screen.js';
-import screenRules from './screen-rules.js';
+import Application from './application.js';
 import ScreenGreetingView from './screen-greeting-view.js';
 
-export default () => {
+export default class ScreenGreeting {
+  constructor() {
+    this.root = new ScreenGreetingView();
+    this.root.onNext = () => Application.showRules();
+  }
 
-  const node = new ScreenGreetingView();
-
-  node.onNext = () => show(screenRules().element);
-
-  return node;
-};
+  get element() {
+    return this.root.element;
+  }
+}

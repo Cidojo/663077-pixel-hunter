@@ -3,18 +3,21 @@ import {GameSetting} from './game-rules.js';
 
 
 const domContainer = {
-  TAG: `header`,
-  CLASS_LIST: [`header`]
+  tagName: `header`,
+  id: null,
+  classList: [`header`]
 };
 
-const homeScreenButtonClass = `.back`;
+const HOME_SCREEN_BUTTON_CLASS = `.back`;
 
 export default class ScreenHeaderView extends AbstractView {
   constructor(state) {
     super();
     this.state = state;
-
     this.render = this.render.bind(this, domContainer);
+    if (state) {
+      this._timerHolder = this.element.querySelector(`.game__timer`);
+    }
   }
 
   get template() {
@@ -32,26 +35,31 @@ export default class ScreenHeaderView extends AbstractView {
       ${this.state ? `
         <div class="game__timer">${this.state.time}</div>
         <div class="game__lives">
-          ${new Array(GameSetting.INITIAL_LIVES - this.state.lives)
-            .fill(`<img src="img/heart__empty.svg" class="game__heart" alt="Life" width="31" height="27">`)
-            .join(``)}
-          ${new Array(this.state.lives)
-            .fill(`<img src="img/heart__full.svg" class="game__heart" alt="Life" width="31" height="27">`)
-            .join(``)}
-        </div>` : ``}
+        ${new Array(GameSetting.INITIAL_LIVES - this.state.lives)
+          .fill(`<img src="img/heart__empty.svg" class="game__heart" alt="Life" width="31" height="27">`)
+          .join(``)}
+        ${new Array(this.state.lives)
+          .fill(`<img src="img/heart__full.svg" class="game__heart" alt="Life" width="31" height="27">`)
+          .join(``)}
+          </div>` : ``}
     `;
   }
 
   bind(screen) {
-    const homeScreenButton = screen.querySelector(homeScreenButtonClass);
+    const homeScreenButton = screen.querySelector(HOME_SCREEN_BUTTON_CLASS);
 
     homeScreenButton.addEventListener(`click`, (evt) => {
       evt.stopPropagation();
       evt.preventDefault();
-      this.showHomeScreen();
+      this.goHome();
     });
   }
 
-  showHomeScreen() {
+  goHome() {
+  }
+
+  updateTimer(state) {
+    this.state = state;
+    this._timerHolder.textContent = this.state.time;
   }
 }

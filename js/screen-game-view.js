@@ -1,13 +1,23 @@
 import AbstractView from './abstract-view.js';
 import {GameKind} from './data/game-data.js';
 import {IMG_FRAME} from './game-rules.js';
-import {resizeImg} from './utils.js';
-import stats from './game-stats-footer.js';
+import resizeImg from './resize-img.js';
+import ScreenHeaderView from './screen-header-view.js';
+import ScreenStatsBarView from './screen-stats-bar-view.js';
 
-export default class ScreenGreetingView extends AbstractView {
+export default class ScreenGameView extends AbstractView {
   constructor(state) {
     super();
     this.state = state;
+    this.header = new ScreenHeaderView(this.state);
+
+    this.header.goHome = () => {
+      this.onHomeButtonClick();
+    };
+
+    this.statsBar = new ScreenStatsBarView(this.state);
+    this.addHeader(this.header.element);
+    this.addFooter(this.statsBar.element);
   }
 
   get template() {
@@ -39,21 +49,42 @@ export default class ScreenGreetingView extends AbstractView {
         <form class="game__content">
         ${optionsTemplate(this.state.game)}
         </form>
-        ${stats(this.state)}
       </section>
     `;
   }
 
-  bind(screen) {
-    const answers = Array.from(screen.querySelectorAll(this.state.game.answerSelector));
+  updateState(updatedState) {
+    this.state = updatedState;
+  }
 
-    answers.forEach((it) => {
+  get answers() {
+    return Array.from(this.element.querySelectorAll(this.state.game.answerSelector));
+  }
+
+  addHeader(header) {
+    this.element.insertAdjacentElement(`afterbegin`, header);
+  }
+
+  addFooter(statsBar) {
+    this.element.lastChild.appendChild(statsBar);
+  }
+
+  updateHeader(state) {
+    this.updateState(state);
+
+    this.header.updateTimer(state);
+  }
+
+  bind() {
+    this.answers.forEach((it) => {
       it.addEventListener(`click`, (evt) => {
-        this.onNext(answers, evt, this.state);
+        this.onAnswer(evt.currentTarget);
       });
     });
   }
 
-  onNext() {
+  onAnswer() {
+  }
+  onHomeButtonClick() {
   }
 }

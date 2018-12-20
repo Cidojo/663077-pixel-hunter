@@ -1,69 +1,52 @@
-import {game, GameKind} from './game-data.js';
+import {game} from './game-data.js';
 import {GameSetting, AnswerType, TimeLine} from './../game-rules.js';
+import {GameKind} from './game-data.js';
 
 const INITIAL_GAME = Object.freeze({
-  level: 1,
+  level: 0,
   type: 0,
   lives: GameSetting.INITIAL_LIVES,
   answers: [],
-  time: 21,
+  time: GameSetting.TIME_LIMIT,
   game: game.random
 });
 
-class UserAnswer {
-  constructor(isCorrect, time) {
-    this.time = time;
-    this.isCorrect = isCorrect;
-  }
-  get type() {
+
+const createUserAnswer = (answerStatus, time) => {
+  const getAnswerType = () => {
     switch (true) {
-      case (!this.isCorrect):
+      case (!answerStatus):
         return AnswerType.WRONG;
-      case (this.time < TimeLine.FAST):
+      case (time > TimeLine.FAST):
         return AnswerType.FAST;
-      case (this.time > TimeLine.SLOW):
+      case (time < TimeLine.SLOW):
         return AnswerType.SLOW;
       default:
         return AnswerType.CORRECT;
     }
-  }
-}
+  };
 
-
-// @param {currentState} state objects
-// $result boolean, checks if there are lives left in case of wrong answer
-
-const canContinue = (currentState, answerStatus) => {
-  return currentState.level + 1 <= GameSetting.MAX_LEVEL && (answerStatus || currentState.lives - 1 >= 0);
+  return {
+    isCorrect: answerStatus,
+    time,
+    type: getAnswerType()
+  };
 };
 
-
-// @param {state} current state object
-// @param {answerStatus} boolean, says is current user answer is full and correct or wrong
-// $result new state object with added user answer
-
-const updateStateAnswer = (state, answerStatus) => {
-  state.answers.push(new UserAnswer(answerStatus, state.time));
-  return Object.assign({}, state);
-};
-
-
-// @param {answers} user answers from current screen
-// @param {evt} click event
-// @param {state} current state object
-// $return null if not all answers have been recieved, else returns boolean value if correct or not
-
-const checkAnswer = (answersNodes, evt, state) => {
-
-  const userAnswers = state.game.kind === GameKind.FIND ?
-    [answersNodes.indexOf(evt.currentTarget)]
-    :
-    answersNodes.filter((element) => element.checked).map((input) => input.value);
-
-  return userAnswers.length === state.game.answers.length ?
-    state.game.answers.every((gameAnswer, index) => userAnswers[index] === gameAnswer)
+const checkUserAnswer = (userAnswers, correctAnswers) => {
+  return userAnswers.length === correctAnswers.length ?
+    correctAnswers.every((gameAnswer, index) => userAnswers[index] === gameAnswer)
     :
     null;
+};
+
+
+const getUserAnswers = (possibleAnswers, userAnswer, state) => {
+
+  return state.game.kind === GameKind.FIND ?
+    [possibleAnswers.indexOf(userAnswer)]
+    :
+    possibleAnswers.filter((element) => element.checked).map((input) => input.value);
 };
 
 
@@ -74,8 +57,8 @@ const changeLevel = (state) => {
   if (state !== Object(state) || !state.hasOwnProperty(`level`)) {
     throw new Error(`${state} is not an object or has no level property`);
   }
-  if (state.level < 1 || state.level > GameSetting.MAX_LEVEL) {
-    throw new Error(`incorrect data, state object's level property should be in interval from 1 to ${GameSetting.MAX_LEVEL}`);
+  if (state.level < 0 || state.level >= GameSetting.MAX_LEVEL) {
+    throw new Error(`incorrect data, state object's level property should be in interval from 0 to ${GameSetting.MAX_LEVEL - 1}`);
   }
 
   return Object.assign({}, state, {level: state.level + 1, game: game.random});
@@ -100,29 +83,4 @@ const reapLife = (state) => {
 };
 
 
-// @param {state} object that describes current game state
-// $return new game state object with decreased time property
-
-const updateTime = (state) => {
-  if (state !== Object(state) || !state.hasOwnProperty(`time`)) {
-    throw new Error(`${state} is not an object or has no time property`);
-  }
-
-  if (state.time < 0 || state.time > GameSetting.TIME_LIMIT) {
-    throw new Error(`incorrect data, state object's time property should be in interval from 0 to ${GameSetting.TIME_LIMIT}`);
-  }
-
-  const newTime = state.time === 0 ? 0 : state.time - 1;
-
-  return Object.assign({}, state, {time: newTime});
-};
-
-
-const updateState = (state, answerStatus) => {
-  const newState = updateStateAnswer(state, answerStatus);
-
-  return changeLevel(answerStatus ? newState : reapLife(newState));
-};
-
-
-export {INITIAL_GAME, updateTime, updateState, checkAnswer, canContinue, changeLevel, reapLife};
+export {INITIAL_GAME, changeLevel, reapLife, createUserAnswer, checkUserAnswer, getUserAnswers};
