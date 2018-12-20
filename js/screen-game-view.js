@@ -2,16 +2,20 @@ import AbstractView from './abstract-view.js';
 import {GameKind} from './data/game-data.js';
 import {IMG_FRAME} from './game-rules.js';
 import resizeImg from './resize-img.js';
-import ScreenHeader from './screen-header.js';
+import ScreenHeaderView from './screen-header-view.js';
 import ScreenStatsBarView from './screen-stats-bar-view.js';
 
 export default class ScreenGameView extends AbstractView {
   constructor(state) {
     super();
     this.state = state;
-    this.header = new ScreenHeader(this.state);
-    this.statsBar = new ScreenStatsBarView(this.state);
+    this.header = new ScreenHeaderView(this.state);
 
+    this.header.goHome = () => {
+      this.onHomeButtonClick();
+    };
+
+    this.statsBar = new ScreenStatsBarView(this.state);
     this.addHeader(this.header.element);
     this.addFooter(this.statsBar.element);
   }
@@ -68,10 +72,7 @@ export default class ScreenGameView extends AbstractView {
   updateHeader(state) {
     this.updateState(state);
 
-    this.header.root.updateTimer(state);
-    // const header = new ScreenHeader(this.state);
-    // this.element.replaceChild(header.element, this.header.element);
-    // this.header = header;
+    this.header.updateTimer(state);
   }
 
   bind() {
@@ -83,5 +84,7 @@ export default class ScreenGameView extends AbstractView {
   }
 
   onAnswer() {
+  }
+  onHomeButtonClick() {
   }
 }

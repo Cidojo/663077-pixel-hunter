@@ -52,7 +52,6 @@ export default class ScreenHeaderView extends AbstractView {
       evt.stopPropagation();
       evt.preventDefault();
       this.goHome();
-      this.clickNotification();
     });
   }
 

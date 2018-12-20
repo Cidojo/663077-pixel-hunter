@@ -1,8 +1,9 @@
 import AbstractView from './abstract-view.js';
+import Application from './application.js';
 import {AnswerType, ScoreBonus, GameSetting} from './game-rules.js';
 import ScreenStatsBarView from './screen-stats-bar-view.js';
 import getScores from './getscores.js';
-import ScreenHeader from './screen-header.js';
+import ScreenHeaderView from './screen-header-view.js';
 
 
 const ExtraResultKind = {
@@ -133,7 +134,8 @@ export default class ScreenStatsView extends AbstractView {
     this.history = history;
     this.history.unshift(this.state);
     this.results = this.history.map((resultState, order) => new ResultTable(resultState, order));
-    this.header = new ScreenHeader();
+    this.header = new ScreenHeaderView();
+    this.header.goHome = () => Application.showGreeting();
     this.addHeader(this.header.element);
   }
 

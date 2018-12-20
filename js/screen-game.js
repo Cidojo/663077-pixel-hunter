@@ -8,9 +8,8 @@ import Application from './application.js';
 class ScreenGame {
   constructor(model) {
     this.model = model;
-    this.root = new ScreenGameView(this.model.state);
-
     this._timer = null;
+    this.init();
   }
 
   get element() {
@@ -32,15 +31,13 @@ class ScreenGame {
     }
   }
 
-  startGame() {
-    this.changeLevel();
-    show(this.root.element);
-    this._tick();
-  }
-
-  changeLevel() {
-    this.model.nextLevel();
+  init() {
     this.root = new ScreenGameView(this.model.state);
+
+    this.root.onHomeButtonClick = () => {
+      this.stopGame();
+      Application.showGreeting();
+    };
 
     this.root.onAnswer = (userAnswer) => {
       const isCorrect = checkUserAnswer(getUserAnswers(this.root.answers, userAnswer, this.model.state), this.model.state.game.answers);
@@ -49,6 +46,14 @@ class ScreenGame {
         this.answer(createUserAnswer(isCorrect, this.model.state.time));
       }
     };
+  }
+
+  startGame() {
+    this.model.nextLevel();
+
+    this.init();
+    show(this.root.element);
+    this._tick();
   }
 
   answer(answer) {

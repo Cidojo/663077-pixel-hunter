@@ -1,5 +1,7 @@
 import AbstractView from './abstract-view.js';
-import ScreenHeader from './screen-header.js';
+import ScreenHeaderView from './screen-header-view.js';
+import Application from './application.js';
+
 
 const InteractiveElementSelector = {
   INPUT: `.rules__input`,
@@ -10,7 +12,8 @@ const InteractiveElementSelector = {
 export default class ScreenRulesView extends AbstractView {
   constructor() {
     super();
-    this.header = new ScreenHeader();
+    this.header = new ScreenHeaderView();
+    this.header.goHome = () => Application.showGreeting();
     this.addHeader(this.header.element);
   }
 

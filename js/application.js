@@ -23,11 +23,10 @@ export default class Application {
     show(rules.element);
   }
 
-  static showGame() {
+  static startGame() {
     const model = new GameModel();
     const screenGame = new ScreenGame(model);
 
-    show(screenGame.element);
     screenGame.startGame();
   }
 
