@@ -14,8 +14,10 @@ export default class ScreenHeaderView extends AbstractView {
   constructor(state) {
     super();
     this.state = state;
-
     this.render = this.render.bind(this, domContainer);
+    if (state) {
+      this._timerHolder = this.element.querySelector(`.game__timer`);
+    }
   }
 
   get template() {
@@ -33,13 +35,13 @@ export default class ScreenHeaderView extends AbstractView {
       ${this.state ? `
         <div class="game__timer">${this.state.time}</div>
         <div class="game__lives">
-          ${new Array(GameSetting.INITIAL_LIVES - this.state.lives)
-            .fill(`<img src="img/heart__empty.svg" class="game__heart" alt="Life" width="31" height="27">`)
-            .join(``)}
-          ${new Array(this.state.lives)
-            .fill(`<img src="img/heart__full.svg" class="game__heart" alt="Life" width="31" height="27">`)
-            .join(``)}
-        </div>` : ``}
+        ${new Array(GameSetting.INITIAL_LIVES - this.state.lives)
+          .fill(`<img src="img/heart__empty.svg" class="game__heart" alt="Life" width="31" height="27">`)
+          .join(``)}
+        ${new Array(this.state.lives)
+          .fill(`<img src="img/heart__full.svg" class="game__heart" alt="Life" width="31" height="27">`)
+          .join(``)}
+          </div>` : ``}
     `;
   }
 
@@ -50,9 +52,15 @@ export default class ScreenHeaderView extends AbstractView {
       evt.stopPropagation();
       evt.preventDefault();
       this.goHome();
+      this.clickNotification();
     });
   }
 
   goHome() {
+  }
+
+  updateTimer(state) {
+    this.state = state;
+    this._timerHolder.textContent = this.state.time;
   }
 }

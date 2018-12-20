@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import getScores from './../logic-getscores.js';
+import getScores from './../getscores.js';
 import {GameSetting} from './../game-rules.js';
 
 describe(`Testing getScores() - function calculates scores at the end of the game`, () => {

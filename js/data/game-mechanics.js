@@ -1,5 +1,6 @@
 import {game} from './game-data.js';
 import {GameSetting, AnswerType, TimeLine} from './../game-rules.js';
+import {GameKind} from './game-data.js';
 
 const INITIAL_GAME = Object.freeze({
   level: 0,
@@ -9,6 +10,7 @@ const INITIAL_GAME = Object.freeze({
   time: GameSetting.TIME_LIMIT,
   game: game.random
 });
+
 
 const createUserAnswer = (answerStatus, time) => {
   const getAnswerType = () => {
@@ -31,12 +33,20 @@ const createUserAnswer = (answerStatus, time) => {
   };
 };
 
+const checkUserAnswer = (userAnswers, correctAnswers) => {
+  return userAnswers.length === correctAnswers.length ?
+    correctAnswers.every((gameAnswer, index) => userAnswers[index] === gameAnswer)
+    :
+    null;
+};
 
-// @param {currentState} state objects
-// $result boolean, checks if there are lives left in case of wrong answer
 
-const canContinue = (currentState, answerStatus) => {
-  return currentState.level + 1 <= GameSetting.MAX_LEVEL && (answerStatus || currentState.lives - 1 >= 0);
+const getUserAnswers = (possibleAnswers, userAnswer, state) => {
+
+  return state.game.kind === GameKind.FIND ?
+    [possibleAnswers.indexOf(userAnswer)]
+    :
+    possibleAnswers.filter((element) => element.checked).map((input) => input.value);
 };
 
 
@@ -48,7 +58,7 @@ const changeLevel = (state) => {
     throw new Error(`${state} is not an object or has no level property`);
   }
   if (state.level < 0 || state.level >= GameSetting.MAX_LEVEL) {
-    throw new Error(`incorrect data, state object's level property should be in interval from 1 to ${GameSetting.MAX_LEVEL - 1}`);
+    throw new Error(`incorrect data, state object's level property should be in interval from 0 to ${GameSetting.MAX_LEVEL - 1}`);
   }
 
   return Object.assign({}, state, {level: state.level + 1, game: game.random});
@@ -73,22 +83,4 @@ const reapLife = (state) => {
 };
 
 
-// @param {state} object that describes current game state
-// $return new game state object with decreased time property
-
-const updateTime = (state) => {
-  if (state !== Object(state) || !state.hasOwnProperty(`time`)) {
-    throw new Error(`${state} is not an object or has no time property`);
-  }
-
-  if (state.time < 0 || state.time > GameSetting.TIME_LIMIT) {
-    throw new Error(`incorrect data, state object's time property should be in interval from 0 to ${GameSetting.TIME_LIMIT}`);
-  }
-
-  const newTime = state.time === 0 ? 0 : state.time - 1;
-
-  return Object.assign({}, state, {time: newTime});
-};
-
-
-export {INITIAL_GAME, updateTime, canContinue, changeLevel, reapLife, createUserAnswer};
+export {INITIAL_GAME, changeLevel, reapLife, createUserAnswer, checkUserAnswer, getUserAnswers};

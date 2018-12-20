@@ -10,7 +10,11 @@ const render = (html, containerOption) => {
   if (containerOption.id !== null) {
     container.id = containerOption.id;
   }
-  container.classList.add(...containerOption.classList);
+
+  if (containerOption.classList !== null) {
+    container.classList.add(...containerOption.classList);
+  }
+
   container.innerHTML = html.trim();
 
   return container;

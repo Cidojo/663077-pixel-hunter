@@ -1,37 +1,15 @@
-import {createUserAnswer} from './data/game-mechanics.js';
-import {show} from './utils.js';
+import {createUserAnswer, getUserAnswers, checkUserAnswer} from './data/game-mechanics.js';
+import show from './show.js';
 import ScreenGameView from './screen-game-view.js';
-import screenStats from './screen-stats.js';
-import {GameKind} from './data/game-data.js';
 import {stopTimer} from './timer.js';
-
-
-const checkUserAnswer = (userAnswers, correctAnswers) => {
-  return userAnswers.length === correctAnswers.length ?
-    correctAnswers.every((gameAnswer, index) => userAnswers[index] === gameAnswer)
-    :
-    null;
-};
-
-
-// @param {answers} user answers from current screen
-// @param {evt} click event
-// @param {state} current state object
-// $return null if not all answers have been recieved, else returns boolean value if correct or not
-
-const getUserAnswers = (possibleAnswers, userAnswer, state) => {
-
-  return state.game.kind === GameKind.FIND ?
-    [possibleAnswers.indexOf(userAnswer)]
-    :
-    possibleAnswers.filter((element) => element.checked).map((input) => input.value);
-};
+import Application from './application.js';
 
 
 class ScreenGame {
   constructor(model) {
     this.model = model;
     this.root = new ScreenGameView(this.model.state);
+
     this._timer = null;
   }
 
@@ -78,13 +56,17 @@ class ScreenGame {
     if (answer !== null) {
       this.stopGame();
       this.model.addUserAnswer(answer);
+
+      const canContinue = this.model.canContinue();
+
       if (!answer.isCorrect) {
         this.model.reapLife();
       }
-      if (this.model.canContinue()) {
+
+      if (canContinue) {
         this.startGame();
       } else {
-        show(screenStats(this.model.state).element);
+        Application.showStats(this.model.state);
       }
     }
   }

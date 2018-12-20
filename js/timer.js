@@ -27,5 +27,3 @@ const resetTimer = (state) => {
 };
 
 export {tick, startTimer, stopTimer, resetTimer};
-
-// import {tick, startTimer, stopTimer} from './timer.js';

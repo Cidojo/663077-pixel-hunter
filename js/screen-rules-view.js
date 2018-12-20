@@ -1,4 +1,5 @@
 import AbstractView from './abstract-view.js';
+import ScreenHeader from './screen-header.js';
 
 const InteractiveElementSelector = {
   INPUT: `.rules__input`,
@@ -9,6 +10,8 @@ const InteractiveElementSelector = {
 export default class ScreenRulesView extends AbstractView {
   constructor() {
     super();
+    this.header = new ScreenHeader();
+    this.addHeader(this.header.element);
   }
 
   get template() {

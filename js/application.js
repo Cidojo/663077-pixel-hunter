@@ -1,10 +1,10 @@
-import {show} from './utils.js';
+import show from './show.js';
 import ScreenIntro from './screen-intro.js';
 import ScreenGreeting from './screen-greeting.js';
 import ScreenRules from './screen-rules.js';
 import ScreenGame from './screen-game.js';
 import GameModel from './screen-game-model.js';
-import screenStats from './screen-stats.js';
+import ScreenStats from './screen-stats.js';
 
 export default class Application {
 
@@ -23,18 +23,16 @@ export default class Application {
     show(rules.element);
   }
 
-  static showGame(userName) {
-    const model = new GameModel(userName);
+  static showGame() {
+    const model = new GameModel();
     const screenGame = new ScreenGame(model);
 
     show(screenGame.element);
     screenGame.startGame();
   }
 
-  static showStats(stats) {
-    // const statistics = new StatsScreen(stats);
-    // show(statistics.element);
-    const statistics = screenStats(stats);
+  static showStats(state) {
+    const statistics = new ScreenStats(state);
     show(statistics.element);
   }
 
