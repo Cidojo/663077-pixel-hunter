@@ -34,9 +34,10 @@ export default class ScreenGameView extends AbstractView {
 
     const optionsTemplate = () =>
       [...this.state.game.options].map((option, order) => {
+        const imgSize = resizeImg(IMG_FRAME, option.image.size);
         return `
         <div class="game__option">
-          <img src="${option.image.source}" alt="Option ${order + 1}" width="${resizeImg(IMG_FRAME, option.image.size).width}" height="${resizeImg(IMG_FRAME, option.image.size).height}">
+          <img src="${option.image.source}" alt="Option ${order + 1}" width="${imgSize.width}" height="${imgSize.height}">
           ${this.state.game.kind === GameKind.PICK ? pickAnswerTemplate(order) : ``}
         </div>
         `;
