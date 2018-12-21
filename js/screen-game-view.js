@@ -1,7 +1,5 @@
 import AbstractView from './abstract-view.js';
 import {GameKind} from './data/game-data.js';
-import {ImgFrame} from './game-rules.js';
-import resizeImg from './resize-img.js';
 import ScreenHeaderView from './screen-header-view.js';
 import ScreenStatsBarView from './screen-stats-bar-view.js';
 
@@ -83,16 +81,20 @@ export default class ScreenGameView extends AbstractView {
       });
     });
 
-    this.element.querySelectorAll(`.game__option img`).forEach((it) => {
-      it.addEventListener(`load`, (evt) => {
-        const newImgSize = resizeImg(ImgFrame[this.state.game.kind], {width: evt.currentTarget.naturalWidth, height: evt.currentTarget.naturalHeight});
-        evt.currentTarget.width = newImgSize.width;
-        evt.currentTarget.height = newImgSize.height;
+
+    const imgContainers = this.element.querySelectorAll(`.game__option`);
+    const images = this.element.querySelectorAll(`.game__option img`);
+
+    images.forEach((it, index) => {
+      it.addEventListener(`load`, () => {
+        this.onImgLoad(it, index, imgContainers[index]);
       }, {once: true});
     });
   }
 
   onAnswer() {
+  }
+  onImgLoad() {
   }
   onHomeButtonClick() {
   }
