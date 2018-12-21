@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view.js';
 import {GameKind} from './data/game-data.js';
-import {IMG_FRAME} from './game-rules.js';
+import {ImgFrame} from './game-rules.js';
 import resizeImg from './resize-img.js';
 import ScreenHeaderView from './screen-header-view.js';
 import ScreenStatsBarView from './screen-stats-bar-view.js';
@@ -34,11 +34,11 @@ export default class ScreenGameView extends AbstractView {
 
     const optionsTemplate = () =>
       [...this.state.game.options].map((option, order) => {
-        const imgSize = resizeImg(IMG_FRAME, option.image.size);
+
         return `
         <div class="game__option">
-          <img src="${option.image.source}" alt="Option ${order + 1}" width="${imgSize.width}" height="${imgSize.height}">
-          ${this.state.game.kind === GameKind.PICK ? pickAnswerTemplate(order) : ``}
+          <img src="${option.image.source}" alt="Option ${order + 1}" width="0" height="0">
+          ${this.state.game.kind !== GameKind.ONE_OF_THREE ? pickAnswerTemplate(order) : ``}
         </div>
         `;
       }).join(``);
@@ -81,6 +81,14 @@ export default class ScreenGameView extends AbstractView {
       it.addEventListener(`click`, (evt) => {
         this.onAnswer(evt.currentTarget);
       });
+    });
+
+    this.element.querySelectorAll(`.game__option img`).forEach((it) => {
+      it.addEventListener(`load`, (evt) => {
+        const newImgSize = resizeImg(ImgFrame[this.state.game.kind], {width: evt.currentTarget.naturalWidth, height: evt.currentTarget.naturalHeight});
+        evt.currentTarget.width = newImgSize.width;
+        evt.currentTarget.height = newImgSize.height;
+      }, {once: true});
     });
   }
 

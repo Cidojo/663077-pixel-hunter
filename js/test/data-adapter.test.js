@@ -1,4 +1,4 @@
-import {adaptServerData, GameKind, ImgType} from './../data/data-adapter.js';
+import {adaptServerData} from './../data/data-adapter.js';
 import {assert} from 'chai';
 
 
@@ -33,7 +33,7 @@ const serverData = [
           height: 458,
           url: `https://k42.kn3.net/D660F0768.jpg`
         },
-        type: `painting`
+        type: `paint`
       }
     ],
     question: `Угадайте для каждого изображения фото или рисунок?`,
@@ -74,7 +74,7 @@ const serverData = [
 
 const localData = [
   {
-    kind: GameKind.PICK,
+    kind: `tinder-like`,
     task: `Угадай, фото или рисунок?`,
     options: [
       {
@@ -85,7 +85,7 @@ const localData = [
             height: 455
           }
         },
-        type: ImgType.PHOTO
+        type: `photo`
       }
     ],
     answerSelector: `.game__answer input`,
@@ -95,7 +95,7 @@ const localData = [
     }
   },
   {
-    kind: GameKind.PICK,
+    kind: `two-of-two`,
     task: `Угадайте для каждого изображения фото или рисунок?`,
     options: [
       {
@@ -106,7 +106,7 @@ const localData = [
             height: 458
           }
         },
-        type: ImgType.PHOTO
+        type: `photo`
       },
       {
         image: {
@@ -116,7 +116,7 @@ const localData = [
             height: 458
           }
         },
-        type: ImgType.PAINT
+        type: `paint`
       }
     ],
     answerSelector: `.game__answer input`,
@@ -126,7 +126,7 @@ const localData = [
     }
   },
   {
-    kind: GameKind.FIND,
+    kind: `one-of-three`,
     task: `Найдите рисунок среди изображений`,
     options: [
       {
@@ -137,7 +137,7 @@ const localData = [
             height: 304
           }
         },
-        type: ImgType.PHOTO
+        type: `photo`
       },
       {
         image: {
@@ -147,7 +147,7 @@ const localData = [
             height: 304
           }
         },
-        type: ImgType.PHOTO
+        type: `photo`
       },
       {
         image: {
@@ -157,13 +157,15 @@ const localData = [
             height: 304
           }
         },
-        type: ImgType.PAINT
+        type: `painting`
       }
     ],
     answerSelector: `.game__option`,
 
     get answers() {
-      return [this.options.map((it) => it.type).indexOf(ImgType.PAINT)];
+      return [this.options.slice().reduce((accumulator, current, index, array) => {
+        return array.some((it, itIndex) => it.type === current.type && itIndex !== index) ? accumulator : index;
+      }, 0)];
     }
   }
 ];

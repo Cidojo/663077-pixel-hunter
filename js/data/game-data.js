@@ -1,18 +1,23 @@
 import {getRandomInteger} from './../utils.js';
 
+
 const GameKind = {
-  PICK: `pick`,
-  FIND: `find`
+  TWO_OF_TWO: `two-of-two`,
+  TINDER_LIKE: `tinder-like`,
+  ONE_OF_THREE: `one-of-three`
 };
+
 
 const ImgType = {
   PHOTO: `photo`,
-  PAINT: `paint`
+  PAINT: `paint`,
+  PAINTING: `painting`
 };
+
 
 const game = {
   'game-1': {
-    kind: GameKind.PICK,
+    kind: GameKind.TWO_OF_TWO,
     task: `Угадайте для каждого изображения фото или рисунок?`,
     options: [
       {
@@ -43,7 +48,7 @@ const game = {
     }
   },
   'game-2': {
-    kind: GameKind.PICK,
+    kind: GameKind.TINDER_LIKE,
     task: `Угадай, фото или рисунок?`,
     options: [
       {
@@ -64,7 +69,7 @@ const game = {
     }
   },
   'game-3': {
-    kind: GameKind.FIND,
+    kind: GameKind.ONE_OF_THREE,
     task: `Найдите рисунок среди изображений`,
     options: [
       {
@@ -95,7 +100,7 @@ const game = {
             height: 2965
           }
         },
-        type: ImgType.PAINT
+        type: ImgType.PAINTING
       }
     ],
     answerSelector: `.game__option`,
@@ -110,4 +115,4 @@ const game = {
   }
 };
 
-export {game, GameKind};
+export {game, GameKind, ImgType};

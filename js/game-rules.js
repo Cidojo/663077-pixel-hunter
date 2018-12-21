@@ -1,3 +1,5 @@
+import {GameKind} from './data/game-data.js';
+
 const GameSetting = {
   MAX_LEVEL: 10,
   INITIAL_LIVES: 3,
@@ -24,9 +26,19 @@ const ScoreBonus = {
   [AnswerType.WRONG]: 0
 };
 
-const IMG_FRAME = {
-  width: 468,
-  height: 458
+const ImgFrame = {
+  [GameKind.TINDER_LIKE]: {
+    width: 705,
+    height: 455
+  },
+  [GameKind.TWO_OF_TWO]: {
+    width: 468,
+    height: 458
+  },
+  [GameKind.ONE_OF_THREE]: {
+    width: 304,
+    height: 455
+  }
 };
 
-export {GameSetting, ScoreBonus, AnswerType, TimeLine, IMG_FRAME};
+export {GameSetting, ScoreBonus, AnswerType, TimeLine, ImgFrame};

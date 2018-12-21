@@ -1,14 +1,4 @@
-const GameKind = {
-  PICK: `pick`,
-  FIND: `find`
-};
-
-
-const ImgType = {
-  PHOTO: `photo`,
-  PAINT: `paint`,
-  PAINTING: `paint`
-};
+import {ImgType} from './game-data.js';
 
 
 const adaptServerData = (data) => {
@@ -45,7 +35,7 @@ const adaptOptions = (serverAnswers) => {
 
 const adaptTinderLike = (question) => {
   return {
-    kind: GameKind.PICK,
+    kind: question.type,
     task: question.question,
     options: adaptOptions(question.answers),
     answerSelector: `.game__answer input`,
@@ -59,7 +49,7 @@ const adaptTinderLike = (question) => {
 
 const adaptTwoOfTwo = (question) => {
   return {
-    kind: GameKind.PICK,
+    kind: question.type,
     task: question.question,
     options: adaptOptions(question.answers),
     answerSelector: `.game__answer input`,
@@ -73,16 +63,18 @@ const adaptTwoOfTwo = (question) => {
 
 const adaptOneOfThree = (question) => {
   return {
-    kind: GameKind.FIND,
+    kind: question.type,
     task: question.question,
     options: adaptOptions(question.answers),
     answerSelector: `.game__option`,
 
     get answers() {
-      return [this.options.map((it) => it.type).indexOf(ImgType.PAINT)];
+      return [this.options.slice().reduce((accumulator, current, index, array) => {
+        return array.some((it, itIndex) => it.type === current.type && itIndex !== index) ? accumulator : index;
+      }, 0)];
     }
   };
 };
 
 
-export {adaptServerData, GameKind, ImgType};
+export {adaptServerData, ImgType};

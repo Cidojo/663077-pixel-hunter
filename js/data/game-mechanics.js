@@ -42,7 +42,7 @@ const checkUserAnswer = (userAnswers, correctAnswers) => {
 
 const getUserAnswers = (possibleAnswers, userAnswer, state) => {
 
-  return state.game.kind === GameKind.FIND ?
+  return state.game.kind === GameKind.ONE_OF_THREE ?
     [possibleAnswers.indexOf(userAnswer)]
     :
     possibleAnswers.filter((element) => element.checked).map((input) => input.value);
