@@ -10,4 +10,12 @@ export default class ScreenIntro {
   get element() {
     return this.root.element;
   }
+
+  start() {
+    this.root.start();
+  }
+
+  stop() {
+    this.root.start();
+  }
 }

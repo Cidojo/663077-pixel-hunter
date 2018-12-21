@@ -3,6 +3,7 @@ import show from './show.js';
 import ScreenGameView from './screen-game-view.js';
 import {stopTimer} from './timer.js';
 import Application from './application.js';
+import resizeImg from './resize-img.js';
 
 
 class ScreenGame {
@@ -45,6 +46,19 @@ class ScreenGame {
       if (isCorrect !== null) {
         this.answer(createUserAnswer(isCorrect, this.model.state.time));
       }
+    };
+
+    this.root.onImgLoad = (img, index, container) => {
+      const frame = this.model.data[this.model.state.level - 1].options[index].image.size;
+      const given = {
+        width: img.naturalWidth,
+        height: img.naturalHeight
+      };
+
+      const newImgSize = resizeImg(frame, given);
+      container.style = `width: ${frame.width}px; height: ${frame.height}px`;
+      img.width = newImgSize.width;
+      img.height = newImgSize.height;
     };
   }
 

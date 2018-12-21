@@ -2,8 +2,10 @@ import {INITIAL_GAME, changeLevel, reapLife} from './data/game-mechanics.js';
 import {tick, resetTimer} from './timer.js';
 
 export default class GameModel {
-  constructor() {
+  constructor(data) {
+    this.data = data;
     this.restart();
+    this.setGame(this.data[this.state.level]);
   }
 
   get state() {
@@ -38,11 +40,16 @@ export default class GameModel {
   }
 
   nextLevel() {
+    this.setGame(this.data[this.state.level]);
     this._state = changeLevel(resetTimer(this._state));
   }
 
   reapLife() {
     this._state = reapLife(this._state);
+  }
+
+  setGame(game) {
+    this._state = Object.assign({}, this._state, {game});
   }
 
   restart() {

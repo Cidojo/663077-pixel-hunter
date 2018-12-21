@@ -24,9 +24,5 @@ const ScoreBonus = {
   [AnswerType.WRONG]: 0
 };
 
-const IMG_FRAME = {
-  width: 468,
-  height: 458
-};
 
-export {GameSetting, ScoreBonus, AnswerType, TimeLine, IMG_FRAME};
+export {GameSetting, ScoreBonus, AnswerType, TimeLine};

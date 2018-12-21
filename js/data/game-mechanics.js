@@ -1,4 +1,3 @@
-import {game} from './game-data.js';
 import {GameSetting, AnswerType, TimeLine} from './../game-rules.js';
 import {GameKind} from './game-data.js';
 
@@ -8,7 +7,7 @@ const INITIAL_GAME = Object.freeze({
   lives: GameSetting.INITIAL_LIVES,
   answers: [],
   time: GameSetting.TIME_LIMIT,
-  game: game.random
+  game: null
 });
 
 
@@ -43,7 +42,7 @@ const checkUserAnswer = (userAnswers, correctAnswers) => {
 
 const getUserAnswers = (possibleAnswers, userAnswer, state) => {
 
-  return state.game.kind === GameKind.FIND ?
+  return state.game.kind === GameKind.ONE_OF_THREE ?
     [possibleAnswers.indexOf(userAnswer)]
     :
     possibleAnswers.filter((element) => element.checked).map((input) => input.value);
@@ -61,7 +60,7 @@ const changeLevel = (state) => {
     throw new Error(`incorrect data, state object's level property should be in interval from 0 to ${GameSetting.MAX_LEVEL - 1}`);
   }
 
-  return Object.assign({}, state, {level: state.level + 1, game: game.random});
+  return Object.assign({}, state, {level: state.level + 1});
 };
 
 
