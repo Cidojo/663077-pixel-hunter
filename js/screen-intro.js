@@ -16,6 +16,6 @@ export default class ScreenIntro {
   }
 
   stop() {
-    this.root.start();
+    this.root.stop();
   }
 }
