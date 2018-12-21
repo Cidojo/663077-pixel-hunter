@@ -6,17 +6,9 @@ import ScreenGame from './screen-game.js';
 import GameModel from './screen-game-model.js';
 import ScreenStats from './screen-stats.js';
 import ModalError from './modal-error.js';
-import {adaptServerData} from './data/data-adapter.js';
+import Loader from './loader.js';
 // import ModalConfirm from './modal-confirm.js';
 
-
-const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
-    return response;
-  } else {
-    throw new Error(`${response.status}: ${response.statusText}`);
-  }
-};
 
 export default class Application {
 
@@ -24,11 +16,9 @@ export default class Application {
     const intro = new ScreenIntro();
     show(intro.element);
     intro.start();
-    window.fetch(`https://es.dump.academy/pixel-hunter/questions`).
-    then(checkStatus).
-    then((response) => response.json()).
+    Loader.loadData().
     then((data) => {
-      this.data = adaptServerData(data);
+      this.data = data;
     }).
     catch(Application.showError).
     then(() => Application.showGreeting()).
@@ -55,6 +45,10 @@ export default class Application {
   static showStats(state) {
     const statistics = new ScreenStats(state);
     show(statistics.element);
+    Loader.saveResults(state).
+      then(() => Loader.loadResults()).
+      then((data) => statistics.showScores(data)).
+      catch(Application.showError);
   }
 
   static showError(error) {

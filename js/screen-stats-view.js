@@ -128,12 +128,12 @@ class ResultTable extends AbstractView {
 
 
 export default class ScreenStatsView extends AbstractView {
-  constructor(state, history) {
+  constructor(state) {
     super();
     this.state = state;
-    this.history = history;
-    this.history.unshift(this.state);
-    this.results = this.history.map((resultState, order) => new ResultTable(resultState, order));
+    // this.history = history;
+    // this.history.unshift(this.state);
+    // this.results = this.history.map((resultState, order) => new ResultTable(resultState, order));
     this.header = new ScreenHeaderView();
     this.header.goHome = () => Application.showGreeting();
     this.addHeader(this.header.element);
@@ -142,16 +142,21 @@ export default class ScreenStatsView extends AbstractView {
   get template() {
     return `
       <section class="result">
-        <h2 class="result__title">${this.results[0].result.isVictory ? `Победа!` : `Поражение`}</h2>
+      <h2 class="result__title">${true ? `Победа!` : `Поражение`}</h2>
       </section>
     `;
+    // <h2 class="result__title">${this.results[0].result.isVictory ? `Победа!` : `Поражение`}</h2>
   }
 
-  addResults() {
-    this.results.forEach((it) => this.element.appendChild(it.element));
+  addResults(data) {
+    const results = data.map((resultState, order) => new ResultTable(resultState, order));
+    results.forEach((it) => this.element.lastChild.appendChild(it.element));
   }
 
   addHeader(header) {
     this.element.insertAdjacentElement(`afterbegin`, header);
   }
+  // showScores(data) {
+  //   this.history = data;
+  // }
 }
