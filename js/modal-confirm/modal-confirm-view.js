@@ -1,10 +1,12 @@
-import AbstractView from './abstract-view.js';
+import AbstractView from './../abstract-view/abstract-view.js';
+
 
 const InteractiveElementSelector = {
   CLOSE_BUTTON: `.modal__close`,
   CONFIRM_BUTTON: `.modal__btn:first-of-type`,
   CANCEL_BUTTON: `.modal__btn:last-of-type`
 };
+
 
 export default class ModalConfirmView extends AbstractView {
   constructor() {

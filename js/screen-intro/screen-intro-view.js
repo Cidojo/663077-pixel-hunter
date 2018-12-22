@@ -1,6 +1,8 @@
-import AbstractView from './abstract-view.js';
+import AbstractView from './../abstract-view/abstract-view.js';
+
 
 const NEXT_BUTTON_CLASS = `.intro__asterisk`;
+
 
 export default class ScreenIntroView extends AbstractView {
   constructor() {

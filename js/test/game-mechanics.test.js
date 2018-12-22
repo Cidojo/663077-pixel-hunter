@@ -1,6 +1,62 @@
 import {assert} from 'chai';
-import getScores from './../getscores.js';
-import {GameSetting} from './../game-rules.js';
+import {changeLevel, reapLife, getScores} from './../data/game-mechanics.js';
+import {GameSetting} from './../data/game-setting.js';
+
+
+describe(`Testing changeLevel() - function to change level in game state object`, () => {
+  // incorrect data
+
+  it(`should deal with incorrect data inside state object`, () => {
+    assert.throws(() => changeLevel({level: -1}), /incorrect data, state object's level property should be in interval from 0 to 9/);
+    assert.throws(() => changeLevel({level: 10}), /incorrect data, state object's level property should be in interval from 0 to 9/);
+  });
+
+  // corner cases
+
+  it(`should return object with increased level`, () => {
+    assert.equal(changeLevel({level: 1}).level, 2);
+    assert.equal(changeLevel({level: 9}).level, 10);
+  });
+
+  // invalid data
+
+  it(`it should only take object with level property as a parameter`, () => {
+    assert.throws(() => changeLevel({}), /is not an object or has no level property/);
+    assert.throws(() => changeLevel([]), /is not an object or has no level property/);
+    assert.throws(() => changeLevel(0), /is not an object or has no level property/);
+    assert.throws(() => changeLevel({notValidProperty: 2}), /is not an object or has no level property/);
+  });
+});
+
+
+describe(`Testing reapLife() - function to manage lives count in game state object`, () => {
+
+  // incorrect data
+
+  it(`should deal with incorrect data inside state object`, () => {
+    assert.throws(() => reapLife({lives: -1}), /incorrect data, state object's lives property should not be less than 0/);
+  });
+
+  // corner cases
+
+  it(`should return object with decreased lives`, () => {
+    assert.equal(reapLife({lives: 3}).lives, 2);
+  });
+
+  it(`should not decrease lives if state object lives is 0`, () => {
+    assert.equal(reapLife({lives: 0}).lives, 0);
+  });
+
+  // invalid data
+
+  it(`it should only take object with lives property as a parameter`, () => {
+    assert.throws(() => reapLife({}), /is not an object or has no lives property/);
+    assert.throws(() => reapLife([]), /is not an object or has no lives property/);
+    assert.throws(() => reapLife(0), /is not an object or has no lives property/);
+    assert.throws(() => reapLife({notValidProperty: 2}), /is not an object or has no lives property/);
+  });
+});
+
 
 describe(`Testing getScores() - function calculates scores at the end of the game`, () => {
 

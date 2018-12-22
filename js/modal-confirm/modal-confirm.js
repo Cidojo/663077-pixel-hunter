@@ -1,5 +1,5 @@
 import ModalConfirmView from './modal-confirm-view.js';
-import Application from './application.js';
+import Application from './../application.js';
 
 
 export default class ModalConfirm {

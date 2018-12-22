@@ -1,13 +1,13 @@
-import show from './show.js';
-import ScreenIntro from './screen-intro.js';
-import ScreenGreeting from './screen-greeting.js';
-import ScreenRules from './screen-rules.js';
-import ScreenGame from './screen-game.js';
-import GameModel from './screen-game-model.js';
-import ScreenStats from './screen-stats.js';
-import ModalError from './modal-error.js';
 import Loader from './loader.js';
-import ModalConfirm from './modal-confirm.js';
+import ScreenIntro from './screen-intro/screen-intro.js';
+import ScreenGreeting from './screen-greeting/screen-greeting.js';
+import ScreenRules from './screen-rules/screen-rules.js';
+import ScreenGame from './screen-game/screen-game.js';
+import GameModel from './screen-game/screen-game-model.js';
+import ScreenStats from './screen-stats/screen-stats.js';
+import ModalError from './modal-error/modal-error.js';
+import ModalConfirm from './modal-confirm/modal-confirm.js';
+import show from './utils/show.js';
 
 
 export default class Application {

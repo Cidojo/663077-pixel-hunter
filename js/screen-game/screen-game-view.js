@@ -1,8 +1,8 @@
-import AbstractView from './abstract-view.js';
-import {GameKind} from './data/game-data.js';
-import ScreenHeaderView from './screen-header-view.js';
-import ScreenStatsBarView from './screen-stats-bar-view.js';
-import {isDebugMode} from './game-rules.js';
+import AbstractView from './../abstract-view/abstract-view.js';
+import {GameKind} from './../data/game-data.js';
+import ScreenHeaderView from './../screen-header/screen-header-view.js';
+import ScreenStatsBarView from './../screen-stats-bar/screen-stats-bar-view.js';
+import {isDebugMode} from './../data/game-setting.js';
 
 
 export default class ScreenGameView extends AbstractView {

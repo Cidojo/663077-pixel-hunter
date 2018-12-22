@@ -1,4 +1,4 @@
-import {GameSetting} from './game-rules.js';
+import {GameSetting} from './../data/game-setting.js';
 
 const tick = (state) => {
   if (state !== Object(state) || !state.hasOwnProperty(`time`)) {

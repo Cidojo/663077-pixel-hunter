@@ -1,9 +1,10 @@
-import {createUserAnswer, getUserAnswers, checkUserAnswer} from './data/game-mechanics.js';
-import show from './show.js';
+import {createUserAnswer, getUserAnswers, checkUserAnswer} from './../data/game-mechanics.js';
+import show from './../utils/show.js';
 import ScreenGameView from './screen-game-view.js';
-import {stopTimer} from './timer.js';
-import Application from './application.js';
-import resizeImg from './resize-img.js';
+import {stopTimer} from './../utils/tick.js';
+import Application from './../application.js';
+import resizeImg from './../utils/resize-img.js';
+
 
 class ScreenGame {
   constructor(model, playerName) {

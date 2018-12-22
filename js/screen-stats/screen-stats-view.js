@@ -1,9 +1,10 @@
-import AbstractView from './abstract-view.js';
-import Application from './application.js';
-import {AnswerType, ScoreBonus, GameSetting} from './game-rules.js';
-import ScreenStatsBarView from './screen-stats-bar-view.js';
-import getScores from './getscores.js';
-import ScreenHeaderView from './screen-header-view.js';
+import AbstractView from './../abstract-view/abstract-view.js';
+import Application from './../application.js';
+import {AnswerType, ScoreBonus} from './../data/game-data.js';
+import {GameSetting} from './../data/game-setting.js';
+import ScreenStatsBarView from './../screen-stats-bar/screen-stats-bar-view.js';
+import {getScores} from './../data/game-mechanics.js';
+import ScreenHeaderView from './../screen-header/screen-header-view.js';
 
 
 const ExtraResultKind = {
@@ -146,7 +147,6 @@ export default class ScreenStatsView extends AbstractView {
       <h2 class="result__title">${isVictory(this.state) ? `Победа!` : `Поражение`}</h2>
       </section>
     `;
-    // <h2 class="result__title">${this.results[0].result.isVictory ? `Победа!` : `Поражение`}</h2>
   }
 
   addResults(data) {

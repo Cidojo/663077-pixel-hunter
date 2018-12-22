@@ -1,11 +1,13 @@
-import AbstractView from './abstract-view.js';
-import {GameSetting} from './game-rules.js';
+import AbstractView from './../abstract-view/abstract-view.js';
+import {GameSetting} from './../data/game-setting.js';
+
 
 const domContainer = {
   tagName: `ul`,
   id: null,
   classList: [`stats`]
 };
+
 
 export default class ScreenStatsBar extends AbstractView {
   constructor(state) {
