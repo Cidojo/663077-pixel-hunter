@@ -5,12 +5,11 @@ import {stopTimer} from './timer.js';
 import Application from './application.js';
 import resizeImg from './resize-img.js';
 
-
 class ScreenGame {
-  constructor(model) {
+  constructor(model, playerName) {
     this.model = model;
     this._timer = null;
-    this.init();
+    this.playerName = playerName;
   }
 
   get element() {
@@ -37,7 +36,7 @@ class ScreenGame {
 
     this.root.onHomeButtonClick = () => {
       this.stopGame();
-      Application.showGreeting();
+      Application.showConfirm(this);
     };
 
     this.root.onAnswer = (userAnswer) => {
@@ -70,6 +69,12 @@ class ScreenGame {
     this._tick();
   }
 
+  continueGame() {
+    this.init();
+    show(this.root.element);
+    this._tick();
+  }
+
   answer(answer) {
 
     if (answer !== null) {
@@ -85,7 +90,7 @@ class ScreenGame {
       if (canContinue) {
         this.startGame();
       } else {
-        Application.showStats(this.model.state);
+        Application.showStats(this.model.state, this.playerName);
       }
     }
   }

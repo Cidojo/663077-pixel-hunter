@@ -8,7 +8,7 @@ const GameKind = {
 const ImgType = {
   PHOTO: `photo`,
   PAINT: `paint`,
-  PAINTING: `painting`
+  PAINTING: `paint`
 };
 
 

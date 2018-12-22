@@ -10,7 +10,7 @@ export default class ScreenStats {
     return this.root.element;
   }
 
-  showScores(data) {
-    this.root.addResults(data);
+  showScores(data, playerName) {
+    this.root.addResults(data, playerName);
   }
 }

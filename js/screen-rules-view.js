@@ -1,6 +1,4 @@
 import AbstractView from './abstract-view.js';
-import ScreenHeaderView from './screen-header-view.js';
-import Application from './application.js';
 
 
 const InteractiveElementSelector = {
@@ -12,9 +10,6 @@ const InteractiveElementSelector = {
 export default class ScreenRulesView extends AbstractView {
   constructor() {
     super();
-    this.header = new ScreenHeaderView();
-    this.header.goHome = () => Application.showGreeting();
-    this.addHeader(this.header.element);
   }
 
   get template() {
@@ -36,10 +31,6 @@ export default class ScreenRulesView extends AbstractView {
         </form>
       </section>
     `;
-  }
-
-  addHeader(header) {
-    this.element.insertAdjacentElement(`afterbegin`, header);
   }
 
   bind(screen) {

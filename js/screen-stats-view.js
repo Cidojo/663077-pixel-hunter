@@ -27,6 +27,10 @@ const ExtraResultTitle = {
 };
 
 
+const isVictory = (state) => {
+  return state.answers.filter((it) => it.isCorrect).length >= GameSetting.MAX_LEVEL - GameSetting.INITIAL_LIVES;
+};
+
 class GameResult {
   constructor(resultState) {
     this.game = resultState;
@@ -34,7 +38,7 @@ class GameResult {
     this.correctAmount = resultState.answers.filter((it) => it.isCorrect).length;
     this.fastAmount = resultState.answers.filter((it) => it.type === AnswerType.FAST).length;
     this.slowAmount = resultState.answers.filter((it) => it.type === AnswerType.SLOW).length;
-    this.isVictory = this.correctAmount >= GameSetting.MAX_LEVEL - GameSetting.INITIAL_LIVES;
+    this.isVictory = isVictory(resultState);
     this.totalScores = getScores(resultState.answers, resultState.lives);
   }
 
@@ -131,9 +135,6 @@ export default class ScreenStatsView extends AbstractView {
   constructor(state) {
     super();
     this.state = state;
-    // this.history = history;
-    // this.history.unshift(this.state);
-    // this.results = this.history.map((resultState, order) => new ResultTable(resultState, order));
     this.header = new ScreenHeaderView();
     this.header.goHome = () => Application.showGreeting();
     this.addHeader(this.header.element);
@@ -142,21 +143,18 @@ export default class ScreenStatsView extends AbstractView {
   get template() {
     return `
       <section class="result">
-      <h2 class="result__title">${true ? `Победа!` : `Поражение`}</h2>
+      <h2 class="result__title">${isVictory(this.state) ? `Победа!` : `Поражение`}</h2>
       </section>
     `;
     // <h2 class="result__title">${this.results[0].result.isVictory ? `Победа!` : `Поражение`}</h2>
   }
 
   addResults(data) {
-    const results = data.map((resultState, order) => new ResultTable(resultState, order));
+    const results = data.reverse().map((resultState, order) => new ResultTable(resultState, order));
     results.forEach((it) => this.element.lastChild.appendChild(it.element));
   }
 
   addHeader(header) {
     this.element.insertAdjacentElement(`afterbegin`, header);
   }
-  // showScores(data) {
-  //   this.history = data;
-  // }
 }

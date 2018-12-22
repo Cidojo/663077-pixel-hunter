@@ -2,6 +2,8 @@ import AbstractView from './abstract-view.js';
 import {GameKind} from './data/game-data.js';
 import ScreenHeaderView from './screen-header-view.js';
 import ScreenStatsBarView from './screen-stats-bar-view.js';
+import {isDebugMode} from './game-rules.js';
+
 
 export default class ScreenGameView extends AbstractView {
   constructor(state) {
@@ -35,6 +37,7 @@ export default class ScreenGameView extends AbstractView {
 
         return `
         <div class="game__option">
+          ${isDebugMode() ? `<div style="font-size: 20px;">${option.type}</div>` : ``}
           <img src="${option.image.source}" alt="Option ${order + 1}" width="0" height="0">
           ${this.state.game.kind !== GameKind.ONE_OF_THREE ? pickAnswerTemplate(order) : ``}
         </div>

@@ -33,7 +33,7 @@ export default class ModalConfirmView extends AbstractView {
     screen.querySelector(InteractiveElementSelector.CLOSE_BUTTON).addEventListener(`click`, (evt) => {
       evt.stopPropagation();
       evt.preventDefault();
-      this.onClose();
+      this.onCancel();
     });
 
     screen.querySelector(InteractiveElementSelector.CONFIRM_BUTTON).addEventListener(`click`, (evt) => {
@@ -49,8 +49,6 @@ export default class ModalConfirmView extends AbstractView {
     });
   }
 
-  onClose() {
-  }
   onCancel() {
   }
   onConfirm() {

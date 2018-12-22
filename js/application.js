@@ -7,7 +7,7 @@ import GameModel from './screen-game-model.js';
 import ScreenStats from './screen-stats.js';
 import ModalError from './modal-error.js';
 import Loader from './loader.js';
-// import ModalConfirm from './modal-confirm.js';
+import ModalConfirm from './modal-confirm.js';
 
 
 export default class Application {
@@ -35,24 +35,35 @@ export default class Application {
     show(rules.element);
   }
 
-  static startGame() {
-    const model = new GameModel(this.data);
+  static startGame(playerName) {
+    const model = new GameModel(this.data, playerName);
     const screenGame = new ScreenGame(model);
 
     screenGame.startGame();
   }
 
-  static showStats(state) {
+  static continueGame(game) {
+    const screenGame = game;
+
+    screenGame.continueGame();
+  }
+
+  static showStats(state, playerName) {
     const statistics = new ScreenStats(state);
     show(statistics.element);
     Loader.saveResults(state).
       then(() => Loader.loadResults()).
-      then((data) => statistics.showScores(data)).
+      then((data) => statistics.showScores(data, playerName)).
       catch(Application.showError);
   }
 
   static showError(error) {
     const modalError = new ModalError(error);
     show(modalError.element);
+  }
+
+  static showConfirm(currentGame) {
+    const modalConfirm = new ModalConfirm(currentGame);
+    show(modalConfirm.element);
   }
 }

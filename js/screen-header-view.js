@@ -60,6 +60,7 @@ export default class ScreenHeaderView extends AbstractView {
 
   updateTimer(state) {
     this.state = state;
+
     this._timerHolder.textContent = this.state.time;
   }
 }
