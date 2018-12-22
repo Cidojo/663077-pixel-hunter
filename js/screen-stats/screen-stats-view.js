@@ -39,7 +39,7 @@ class GameResult {
     this.correctAmount = resultState.answers.filter((it) => it.isCorrect).length;
     this.fastAmount = resultState.answers.filter((it) => it.type === AnswerType.FAST).length;
     this.slowAmount = resultState.answers.filter((it) => it.type === AnswerType.SLOW).length;
-    this.isVictory = isVictory(resultState);
+    this.victory = isVictory(resultState);
     this.totalScores = getScores(resultState.answers, resultState.lives);
   }
 
@@ -127,7 +127,7 @@ class ResultTable extends AbstractView {
             </tr>` : ``}
         `;
 
-    return this.result.isVictory ? winResult() : lostResult();
+    return this.result.victory ? winResult() : lostResult();
   }
 }
 

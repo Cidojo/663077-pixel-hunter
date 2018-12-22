@@ -13,9 +13,15 @@ const getPickGameAnswers = (options) => {
 
 
 const getFindGameAnswers = (options) => {
-  return [options.reduce((accumulator, current, index, array) => {
-    return array.some((it, itIndex) => it.type === current.type && itIndex !== index) ? accumulator : index;
-  }, 0)];
+  const answer = options.reduce((accumulator, current, index) => {
+    return Object.assign(accumulator, {
+      [current.type]: {
+        count: ((accumulator[current.type] || {}).count || 0) + 1,
+        index
+      }
+    });
+  }, {});
+  return [Object.values(answer).find((i) => i.count === 1).index];
 };
 
 
@@ -38,17 +44,17 @@ const adaptOptions = (serverAnswers) => {
 const adaptServerData = (data) => {
   return data.map((it) => {
     const options = adaptOptions(it.answers);
-    const isFindGame = it.type === GameKind.ONE_OF_THREE;
+    const gameTypeOneOfThree = it.type === GameKind.ONE_OF_THREE;
 
     return {
       kind: it.type,
       task: it.question,
       options,
-      answerSelector: isFindGame ? AnswerSelector.GAME_FIND : AnswerSelector.GAME_PICK,
-      answers: isFindGame ? getFindGameAnswers(options) : getPickGameAnswers(options)
+      answerSelector: gameTypeOneOfThree ? AnswerSelector.GAME_FIND : AnswerSelector.GAME_PICK,
+      answers: gameTypeOneOfThree ? getFindGameAnswers(options) : getPickGameAnswers(options)
     };
   });
 };
 
 
-export {adaptServerData, ImgType};
+export {adaptServerData, AnswerSelector};

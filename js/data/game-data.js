@@ -16,8 +16,7 @@ const AnswerType = {
   FAST: `FAST`,
   SLOW: `SLOW`,
   WRONG: `WRONG`,
-  CORRECT: `CORRECT`,
-  UNKNOWN: `UNKNOWN`,
+  CORRECT: `CORRECT`
 };
 
 
@@ -33,7 +32,6 @@ const ScoreBonus = {
   [AnswerType.FAST]: 50,
   [AnswerType.SLOW]: -50,
   [AnswerType.WRONG]: 0,
-  [AnswerType.UNKNOWN]: 0
 };
 
 export {GameKind, ImgType, TimeLine, ScoreBonus, AnswerType};

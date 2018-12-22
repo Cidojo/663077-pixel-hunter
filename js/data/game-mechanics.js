@@ -42,8 +42,6 @@ const getScores = (answers, livesAmount) => {
 const createUserAnswer = (answerStatus, time) => {
   const getAnswerType = () => {
     switch (true) {
-      case (time === 0):
-        return AnswerType.UNKNOWN;
       case (!answerStatus):
         return AnswerType.WRONG;
       case (time > TimeLine.FAST):

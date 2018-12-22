@@ -5,6 +5,9 @@ import {stopTimer} from './../utils/tick.js';
 import Application from './../application.js';
 
 
+const TICK_INTERVAL = 1000;
+
+
 class ScreenGame {
   constructor(model, playerName) {
     this.model = model;
@@ -27,7 +30,7 @@ class ScreenGame {
     if (this.model.state.time === 0) {
       this.onTimeout();
     } else {
-      this._timer = setTimeout(() => this._tick(), 1000);
+      this._timer = setTimeout(() => this._tick(), TICK_INTERVAL);
     }
   }
 
@@ -46,20 +49,6 @@ class ScreenGame {
         this.goToNextScreen(createUserAnswer(isCorrect, this.model.state.time));
       }
     };
-
-    // this.root.onImgLoad = (img, index, container) => {
-    //   const frame = this.model.data[this.model.state.level - 1].options[index].image.size;
-    //   const given = {
-    //     width: img.naturalWidth,
-    //     height: img.naturalHeight
-    //   };
-    //
-    //   const newImgSize = resizeImg(frame, given);
-    //   container.style[`width`] = frame.width + `px`;
-    //   container.style[`height`] = frame.height + `px`;
-    //   img.width = newImgSize.width;
-    //   img.height = newImgSize.height;
-    // };
   }
 
   startGame() {
@@ -67,7 +56,8 @@ class ScreenGame {
 
     this.init();
     show(this.root.element);
-    this._tick();
+
+    setTimeout(() => this._tick(), TICK_INTERVAL);
   }
 
   continueGame() {

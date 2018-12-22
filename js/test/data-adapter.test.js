@@ -1,4 +1,5 @@
-import {adaptServerData} from './../data/data-adapter.js';
+import {adaptServerData, AnswerSelector} from './../data/data-adapter.js';
+import {ImgType, GameKind} from './../data/game-data.js';
 import {assert} from 'chai';
 
 
@@ -11,11 +12,11 @@ const serverData = [
           height: 455,
           url: `http://i.imgur.com/rY9u55S.jpg`
         },
-        type: `photo`
+        type: ImgType.PHOTO
       }
     ],
     question: `Угадай, фото или рисунок?`,
-    type: `tinder-like`
+    type: GameKind.TINDER_LIKE
   },
   {
     answers: [
@@ -25,7 +26,7 @@ const serverData = [
           height: 458,
           url: `http://i.imgur.com/zHRZW1C.jpg`
         },
-        type: `photo`
+        type: ImgType.PHOTO
       },
       {
         image: {
@@ -33,11 +34,11 @@ const serverData = [
           height: 458,
           url: `https://k42.kn3.net/D660F0768.jpg`
         },
-        type: `paint`
+        type: ImgType.PAINT
       }
     ],
     question: `Угадайте для каждого изображения фото или рисунок?`,
-    type: `two-of-two`
+    type: GameKind.TWO_OF_TWO
   },
   {
     answers: [
@@ -47,7 +48,7 @@ const serverData = [
           height: 304,
           url: `https://i.redd.it/bj70zjl196kx.jpg`
         },
-        type: `photo`
+        type: ImgType.PHOTO
       },
       {
         image: {
@@ -55,7 +56,7 @@ const serverData = [
           height: 304,
           url: `http://i.imgur.com/eSlWjE7.jpg`
         },
-        type: `photo`
+        type: ImgType.PHOTO
       },
       {
         image: {
@@ -63,18 +64,18 @@ const serverData = [
           height: 304,
           url: `https://k37.kn3.net/51254FE87.jpg`
         },
-        type: `paint`
+        type: ImgType.PAINTING
       }
     ],
     question: `Найдите рисунок среди изображений`,
-    type: `one-of-three`
+    type: GameKind.ONE_OF_THREE
   }
 ];
 
 
 const localData = [
   {
-    kind: `tinder-like`,
+    kind: GameKind.TINDER_LIKE,
     task: `Угадай, фото или рисунок?`,
     options: [
       {
@@ -85,17 +86,17 @@ const localData = [
             height: 455
           }
         },
-        type: `photo`
+        type: ImgType.PHOTO
       }
     ],
-    answerSelector: `.game__answer input`,
+    answerSelector: AnswerSelector.GAME_PICK,
 
     get answers() {
       return this.options.map((it) => it.type);
     }
   },
   {
-    kind: `two-of-two`,
+    kind: GameKind.TWO_OF_TWO,
     task: `Угадайте для каждого изображения фото или рисунок?`,
     options: [
       {
@@ -106,7 +107,7 @@ const localData = [
             height: 458
           }
         },
-        type: `photo`
+        type: ImgType.PHOTO
       },
       {
         image: {
@@ -116,17 +117,17 @@ const localData = [
             height: 458
           }
         },
-        type: `paint`
+        type: ImgType.PAINT
       }
     ],
-    answerSelector: `.game__answer input`,
+    answerSelector: AnswerSelector.GAME_PICK,
 
     get answers() {
       return this.options.map((it) => it.type);
     }
   },
   {
-    kind: `one-of-three`,
+    kind: GameKind.ONE_OF_THREE,
     task: `Найдите рисунок среди изображений`,
     options: [
       {
@@ -137,7 +138,7 @@ const localData = [
             height: 304
           }
         },
-        type: `photo`
+        type: ImgType.PHOTO
       },
       {
         image: {
@@ -147,7 +148,7 @@ const localData = [
             height: 304
           }
         },
-        type: `photo`
+        type: ImgType.PHOTO
       },
       {
         image: {
@@ -157,10 +158,10 @@ const localData = [
             height: 304
           }
         },
-        type: `paint`
+        type: ImgType.PAINT
       }
     ],
-    answerSelector: `.game__option`,
+    answerSelector: AnswerSelector.GAME_FIND,
 
     get answers() {
       return [this.options.slice().reduce((accumulator, current, index, array) => {
