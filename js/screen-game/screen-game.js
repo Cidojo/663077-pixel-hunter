@@ -1,16 +1,18 @@
-import {createUserAnswer, getUserAnswers, checkUserAnswer} from './data/game-mechanics.js';
-import show from './show.js';
+import {createUserAnswer, getUserAnswers, checkUserAnswer} from './../data/game-mechanics.js';
+import show from './../utils/show.js';
 import ScreenGameView from './screen-game-view.js';
-import {stopTimer} from './timer.js';
-import Application from './application.js';
-import resizeImg from './resize-img.js';
+import {stopTimer} from './../utils/tick.js';
+import Application from './../application.js';
+
+
+const TICK_INTERVAL = 1000;
 
 
 class ScreenGame {
-  constructor(model) {
+  constructor(model, playerName) {
     this.model = model;
     this._timer = null;
-    this.init();
+    this.playerName = playerName;
   }
 
   get element() {
@@ -28,7 +30,7 @@ class ScreenGame {
     if (this.model.state.time === 0) {
       this.onTimeout();
     } else {
-      this._timer = setTimeout(() => this._tick(), 1000);
+      this._timer = setTimeout(() => this._tick(), TICK_INTERVAL);
     }
   }
 
@@ -37,28 +39,15 @@ class ScreenGame {
 
     this.root.onHomeButtonClick = () => {
       this.stopGame();
-      Application.showGreeting();
+      Application.showConfirm(this);
     };
 
     this.root.onAnswer = (userAnswer) => {
       const isCorrect = checkUserAnswer(getUserAnswers(this.root.answers, userAnswer, this.model.state), this.model.state.game.answers);
 
       if (isCorrect !== null) {
-        this.answer(createUserAnswer(isCorrect, this.model.state.time));
+        this.goToNextScreen(createUserAnswer(isCorrect, this.model.state.time));
       }
-    };
-
-    this.root.onImgLoad = (img, index, container) => {
-      const frame = this.model.data[this.model.state.level - 1].options[index].image.size;
-      const given = {
-        width: img.naturalWidth,
-        height: img.naturalHeight
-      };
-
-      const newImgSize = resizeImg(frame, given);
-      container.style = `width: ${frame.width}px; height: ${frame.height}px`;
-      img.width = newImgSize.width;
-      img.height = newImgSize.height;
     };
   }
 
@@ -67,31 +56,38 @@ class ScreenGame {
 
     this.init();
     show(this.root.element);
+
+    setTimeout(() => this._tick(), TICK_INTERVAL);
+  }
+
+  continueGame() {
+    this.init();
+    show(this.root.element);
     this._tick();
   }
 
-  answer(answer) {
+  goToNextScreen(answer) {
 
     if (answer !== null) {
       this.stopGame();
       this.model.addUserAnswer(answer);
 
-      const canContinue = this.model.canContinue();
+      const canContinueState = this.model.canContinue();
 
       if (!answer.isCorrect) {
         this.model.reapLife();
       }
 
-      if (canContinue) {
+      if (canContinueState) {
         this.startGame();
       } else {
-        Application.showStats(this.model.state);
+        Application.showStats(this.model.state, this.playerName);
       }
     }
   }
 
   onTimeout() {
-    this.answer(createUserAnswer(false, 0));
+    this.goToNextScreen(createUserAnswer(false, 0));
   }
 }
 

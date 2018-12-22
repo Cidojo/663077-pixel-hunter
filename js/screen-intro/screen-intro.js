@@ -1,5 +1,5 @@
 import ScreenIntroView from './screen-intro-view.js';
-import Application from './application.js';
+import Application from './../application.js';
 
 export default class ScreenIntro {
   constructor() {

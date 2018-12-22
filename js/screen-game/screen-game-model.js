@@ -1,5 +1,6 @@
-import {INITIAL_GAME, changeLevel, reapLife} from './data/game-mechanics.js';
-import {tick, resetTimer} from './timer.js';
+import {INITIAL_GAME, changeLevel, reapLife} from './../data/game-mechanics.js';
+import {tick, resetTimer} from './../utils/tick.js';
+
 
 export default class GameModel {
   constructor(data) {
@@ -10,10 +11,6 @@ export default class GameModel {
 
   get state() {
     return Object.freeze(this._state);
-  }
-
-  get currentLevel() {
-    return this._state.level;
   }
 
   get lastUserAnswer() {

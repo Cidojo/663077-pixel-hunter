@@ -1,9 +1,12 @@
 import {adaptServerData} from './data/data-adapter.js';
 
+
 const SERVER_URL = `https://es.dump.academy/pixel-hunter`;
+
 
 const DEFAULT_NAME = `o0`;
 const APP_ID = 19850701;
+
 
 const checkStatus = (response) => {
   if (response.ok) {
@@ -13,7 +16,9 @@ const checkStatus = (response) => {
   }
 };
 
+
 const toJSON = (res) => res.json();
+
 
 export default class Loader {
   static loadData() {

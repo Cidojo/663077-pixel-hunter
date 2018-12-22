@@ -1,19 +1,27 @@
-import {ImgType} from './game-data.js';
+import {ImgType, GameKind} from './game-data.js';
 
 
-const adaptServerData = (data) => {
-  return data.map((it) => {
-    switch (it.type) {
-      case (`tinder-like`):
-        return adaptTinderLike(it);
-      case (`two-of-two`):
-        return adaptTwoOfTwo(it);
-      case (`one-of-three`):
-        return adaptOneOfThree(it);
-      default:
-        return null;
-    }
-  });
+const AnswerSelector = {
+  GAME_FIND: `.game__option`,
+  GAME_PICK: `.game__answer input`
+};
+
+
+const getPickGameAnswers = (options) => {
+  return options.map((it) => it.type);
+};
+
+
+const getFindGameAnswers = (options) => {
+  const answer = options.reduce((accumulator, current, index) => {
+    return Object.assign(accumulator, {
+      [current.type]: {
+        count: ((accumulator[current.type] || {}).count || 0) + 1,
+        index
+      }
+    });
+  }, {});
+  return [Object.values(answer).find((i) => i.count === 1).index];
 };
 
 
@@ -33,48 +41,20 @@ const adaptOptions = (serverAnswers) => {
 };
 
 
-const adaptTinderLike = (question) => {
-  return {
-    kind: question.type,
-    task: question.question,
-    options: adaptOptions(question.answers),
-    answerSelector: `.game__answer input`,
+const adaptServerData = (data) => {
+  return data.map((it) => {
+    const options = adaptOptions(it.answers);
+    const gameTypeOneOfThree = it.type === GameKind.ONE_OF_THREE;
 
-    get answers() {
-      return this.options.map((it) => it.type);
-    }
-  };
+    return {
+      kind: it.type,
+      task: it.question,
+      options,
+      answerSelector: gameTypeOneOfThree ? AnswerSelector.GAME_FIND : AnswerSelector.GAME_PICK,
+      answers: gameTypeOneOfThree ? getFindGameAnswers(options) : getPickGameAnswers(options)
+    };
+  });
 };
 
 
-const adaptTwoOfTwo = (question) => {
-  return {
-    kind: question.type,
-    task: question.question,
-    options: adaptOptions(question.answers),
-    answerSelector: `.game__answer input`,
-
-    get answers() {
-      return this.options.map((it) => it.type);
-    }
-  };
-};
-
-
-const adaptOneOfThree = (question) => {
-  return {
-    kind: question.type,
-    task: question.question,
-    options: adaptOptions(question.answers),
-    answerSelector: `.game__option`,
-
-    get answers() {
-      return [this.options.slice().reduce((accumulator, current, index, array) => {
-        return array.some((it, itIndex) => it.type === current.type && itIndex !== index) ? accumulator : index;
-      }, 0)];
-    }
-  };
-};
-
-
-export {adaptServerData, ImgType};
+export {adaptServerData, AnswerSelector};

@@ -1,5 +1,20 @@
-import AbstractView from './abstract-view.js';
-import {GameSetting} from './game-rules.js';
+import AbstractView from './../abstract-view/abstract-view.js';
+import {GameSetting} from './../data/game-setting.js';
+
+
+const Blink = {
+  INTERVAL: 250,
+  START_TIME: 5
+};
+
+
+const HOME_SCREEN_BUTTON_CLASS = `.back`;
+
+
+const OpacityEdge = {
+  FULL: 100,
+  ZERO: 0
+};
 
 
 const domContainer = {
@@ -8,7 +23,6 @@ const domContainer = {
   classList: [`header`]
 };
 
-const HOME_SCREEN_BUTTON_CLASS = `.back`;
 
 export default class ScreenHeaderView extends AbstractView {
   constructor(state) {
@@ -61,5 +75,20 @@ export default class ScreenHeaderView extends AbstractView {
   updateTimer(state) {
     this.state = state;
     this._timerHolder.textContent = this.state.time;
+
+    if (this.state.time <= Blink.START_TIME) {
+      this.startBlinking();
+    }
+  }
+
+  startBlinking() {
+    if (!this.state.time) {
+      clearInterval(this.blinkTimer);
+    } else {
+      clearInterval(this.blinkTimer);
+      this.blinkTimer = setInterval(() => {
+        this._timerHolder.style.opacity = +this._timerHolder.style.opacity ? OpacityEdge.ZERO : OpacityEdge.FULL;
+      }, Blink.INTERVAL);
+    }
   }
 }

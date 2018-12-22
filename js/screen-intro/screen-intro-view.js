@@ -1,6 +1,8 @@
-import AbstractView from './abstract-view.js';
+import AbstractView from './../abstract-view/abstract-view.js';
+
 
 const NEXT_BUTTON_CLASS = `.intro__asterisk`;
+
 
 export default class ScreenIntroView extends AbstractView {
   constructor() {
@@ -15,16 +17,6 @@ export default class ScreenIntroView extends AbstractView {
       <p class="intro__motto"><sup>*</sup> Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.</p>
     </section>
     `;
-  }
-
-  start(startDegree = 270) {
-    let degree = startDegree === 360 ? 270 : startDegree + 10;
-    this._splash.style = `color: hsl(${degree}, 80%, 10%);`;
-    this.timeout = setTimeout(() => this.start(degree), 150);
-  }
-
-  stop() {
-    clearTimeout(this.timeout);
   }
 
   bind(screen) {

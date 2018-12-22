@@ -1,6 +1,8 @@
-import AbstractView from './abstract-view.js';
+import AbstractView from './../abstract-view/abstract-view.js';
+
 
 const NEXT_BUTTON_CLASS = `.greeting__continue`;
+
 
 export default class ScreenGreetingView extends AbstractView {
   constructor() {

@@ -1,4 +1,5 @@
-import AbstractView from './abstract-view.js';
+import AbstractView from './../abstract-view/abstract-view.js';
+
 
 export default class ModalError extends AbstractView {
   constructor(error) {
