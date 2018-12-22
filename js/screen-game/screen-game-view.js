@@ -3,6 +3,7 @@ import {GameKind} from './../data/game-data.js';
 import ScreenHeaderView from './../screen-header/screen-header-view.js';
 import ScreenStatsBarView from './../screen-stats-bar/screen-stats-bar-view.js';
 import {isDebugMode} from './../data/game-setting.js';
+import resizeImg from './../utils/resize-img.js';
 
 
 export default class ScreenGameView extends AbstractView {
@@ -95,10 +96,23 @@ export default class ScreenGameView extends AbstractView {
     });
   }
 
+  onImgLoad(img, order, container) {
+    const frame = this.state.game.options[order].image.size;
+    const given = {
+      width: img.naturalWidth,
+      height: img.naturalHeight
+    };
+
+    const newImgSize = resizeImg(frame, given);
+    container.style[`width`] = frame.width + `px`;
+    container.style[`height`] = frame.height + `px`;
+    img.width = newImgSize.width;
+    img.height = newImgSize.height;
+  }
+
   onAnswer() {
   }
-  onImgLoad() {
-  }
+
   onHomeButtonClick() {
   }
 }

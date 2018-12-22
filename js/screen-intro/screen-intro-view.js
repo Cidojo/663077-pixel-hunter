@@ -19,16 +19,6 @@ export default class ScreenIntroView extends AbstractView {
     `;
   }
 
-  start(startDegree = 270) {
-    let degree = startDegree === 360 ? 270 : startDegree + 10;
-    this._splash.style = `color: hsl(${degree}, 80%, 10%);`;
-    this.timeout = setTimeout(() => this.start(degree), 150);
-  }
-
-  stop() {
-    clearTimeout(this.timeout);
-  }
-
   bind(screen) {
     screen.querySelector(NEXT_BUTTON_CLASS).addEventListener(`click`, (evt) => {
       evt.stopPropagation();

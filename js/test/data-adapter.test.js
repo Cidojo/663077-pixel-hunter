@@ -63,7 +63,7 @@ const serverData = [
           height: 304,
           url: `https://k37.kn3.net/51254FE87.jpg`
         },
-        type: `painting`
+        type: `paint`
       }
     ],
     question: `Найдите рисунок среди изображений`,
@@ -157,7 +157,7 @@ const localData = [
             height: 304
           }
         },
-        type: `painting`
+        type: `paint`
       }
     ],
     answerSelector: `.game__option`,

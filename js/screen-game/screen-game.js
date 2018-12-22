@@ -3,7 +3,6 @@ import show from './../utils/show.js';
 import ScreenGameView from './screen-game-view.js';
 import {stopTimer} from './../utils/tick.js';
 import Application from './../application.js';
-import resizeImg from './../utils/resize-img.js';
 
 
 class ScreenGame {
@@ -44,22 +43,23 @@ class ScreenGame {
       const isCorrect = checkUserAnswer(getUserAnswers(this.root.answers, userAnswer, this.model.state), this.model.state.game.answers);
 
       if (isCorrect !== null) {
-        this.answer(createUserAnswer(isCorrect, this.model.state.time));
+        this.goToNextScreen(createUserAnswer(isCorrect, this.model.state.time));
       }
     };
 
-    this.root.onImgLoad = (img, index, container) => {
-      const frame = this.model.data[this.model.state.level - 1].options[index].image.size;
-      const given = {
-        width: img.naturalWidth,
-        height: img.naturalHeight
-      };
-
-      const newImgSize = resizeImg(frame, given);
-      container.style = `width: ${frame.width}px; height: ${frame.height}px`;
-      img.width = newImgSize.width;
-      img.height = newImgSize.height;
-    };
+    // this.root.onImgLoad = (img, index, container) => {
+    //   const frame = this.model.data[this.model.state.level - 1].options[index].image.size;
+    //   const given = {
+    //     width: img.naturalWidth,
+    //     height: img.naturalHeight
+    //   };
+    //
+    //   const newImgSize = resizeImg(frame, given);
+    //   container.style[`width`] = frame.width + `px`;
+    //   container.style[`height`] = frame.height + `px`;
+    //   img.width = newImgSize.width;
+    //   img.height = newImgSize.height;
+    // };
   }
 
   startGame() {
@@ -76,19 +76,19 @@ class ScreenGame {
     this._tick();
   }
 
-  answer(answer) {
+  goToNextScreen(answer) {
 
     if (answer !== null) {
       this.stopGame();
       this.model.addUserAnswer(answer);
 
-      const canContinue = this.model.canContinue();
+      const canContinueState = this.model.canContinue();
 
       if (!answer.isCorrect) {
         this.model.reapLife();
       }
 
-      if (canContinue) {
+      if (canContinueState) {
         this.startGame();
       } else {
         Application.showStats(this.model.state, this.playerName);
@@ -97,7 +97,7 @@ class ScreenGame {
   }
 
   onTimeout() {
-    this.answer(createUserAnswer(false, 0));
+    this.goToNextScreen(createUserAnswer(false, 0));
   }
 }
 

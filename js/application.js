@@ -15,14 +15,13 @@ export default class Application {
   static start() {
     const intro = new ScreenIntro();
     show(intro.element);
-    intro.start();
+
     Loader.loadData().
     then((data) => {
       this.data = data;
     }).
     catch(Application.showError).
-    then(() => Application.showGreeting()).
-    then(() => intro.stop());
+    then(() => Application.showGreeting());
   }
 
   static showGreeting() {

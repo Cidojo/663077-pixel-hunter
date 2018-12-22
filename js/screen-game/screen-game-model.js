@@ -13,10 +13,6 @@ export default class GameModel {
     return Object.freeze(this._state);
   }
 
-  get currentLevel() {
-    return this._state.level;
-  }
-
   get lastUserAnswer() {
     return this._state.answers[this._state.answers.length - 1];
   }
