@@ -11,6 +11,8 @@
     "test": "npm run eslint && npm run stylelint && gulp test"
   },
   "devDependencies": {
+    "@babel/core": "7.2.2",
+    "@babel/preset-env": "7.2.3",
     "autoprefixer": "9.0.2",
     "browser-sync": "2.24.6",
     "chai": "4.2.0",
@@ -29,9 +31,15 @@
     "gulp-sass": "4.0.1",
     "gulp-sourcemaps": "2.6.4",
     "gulp-svgstore": "6.1.1",
+    "gulp-uglify": "3.0.1",
+    "rollup-plugin-babel": "4.1.0",
     "rollup-plugin-commonjs": "9.2.0",
+    "rollup-plugin-node-resolve": "4.0.0",
     "stylelint": "9.4.x",
     "stylelint-config-htmlacademy": "0.1.x"
+  },
+  "dependencies": {
+    "@babel/polyfill": "7.2.5"
   },
   "engines": {
     "node": "10"

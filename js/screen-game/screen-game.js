@@ -9,10 +9,9 @@ const TICK_INTERVAL = 1000;
 
 
 class ScreenGame {
-  constructor(model, playerName) {
+  constructor(model) {
     this.model = model;
     this._timer = null;
-    this.playerName = playerName;
   }
 
   get element() {
@@ -35,7 +34,7 @@ class ScreenGame {
   }
 
   init() {
-    this.root = new ScreenGameView(this.model.state);
+    this.root = new ScreenGameView(this.model.state, this.model.playerName);
 
     this.root.onHomeButtonClick = () => {
       this.stopGame();
