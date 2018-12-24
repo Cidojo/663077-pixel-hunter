@@ -16,9 +16,6 @@ export default class ModalConfirm {
     this.currentGame = currentGame;
 
     const onEscButtonPress = (evt) => {
-      evt.stopPropagation();
-      evt.preventDefault();
-
       if (evt.keyCode === ESC_BUTTON_CODE) {
         this.root.onCancel();
         document.removeEventListener(`keydown`, onEscButtonPress);
