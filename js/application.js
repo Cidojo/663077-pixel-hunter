@@ -5,7 +5,7 @@ import ScreenRules from './screen-rules/screen-rules.js';
 import ScreenGame from './screen-game/screen-game.js';
 import GameModel from './screen-game/screen-game-model.js';
 import ScreenStats from './screen-stats/screen-stats.js';
-import ModalError from './modal-error/modal-error.js';
+import ModalErrorView from './modal-error/modal-error-view.js';
 import ModalConfirm from './modal-confirm/modal-confirm.js';
 import show from './utils/show.js';
 
@@ -13,15 +13,18 @@ import show from './utils/show.js';
 export default class Application {
 
   static start() {
+    this.load();
+  }
+
+  static async load() {
     const intro = new ScreenIntro();
     show(intro.element);
-
-    Loader.loadData().
-    then((data) => {
-      this.data = data;
-    }).
-    catch(Application.showError).
-    then(() => Application.showGreeting());
+    try {
+      this.gameData = await Loader.loadData();
+      this.showGreeting();
+    } catch (error) {
+      this.showError(error);
+    }
   }
 
   static showGreeting() {
@@ -35,7 +38,7 @@ export default class Application {
   }
 
   static startGame(playerName) {
-    const model = new GameModel(this.data, playerName);
+    const model = new GameModel(this.gameData, playerName);
     const screenGame = new ScreenGame(model);
 
     screenGame.startGame();
@@ -47,17 +50,20 @@ export default class Application {
     screenGame.continueGame();
   }
 
-  static showStats(state, playerName) {
-    const statistics = new ScreenStats(state);
+  static async showStats(state, playerName) {
+    const statistics = new ScreenStats(state, playerName);
     show(statistics.element);
-    Loader.saveResults(state).
-      then(() => Loader.loadResults()).
-      then((data) => statistics.showScores(data, playerName)).
-      catch(Application.showError);
+    try {
+      await Loader.saveResults(state);
+      await Loader.loadResults();
+      statistics.showScores(await Loader.loadResults());
+    } catch (error) {
+      this.showError(error);
+    }
   }
 
   static showError(error) {
-    const modalError = new ModalError(error);
+    const modalError = new ModalErrorView(error);
     show(modalError.element);
   }
 

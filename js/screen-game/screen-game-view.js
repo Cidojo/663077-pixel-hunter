@@ -7,8 +7,9 @@ import resizeImg from './../utils/resize-img.js';
 
 
 export default class ScreenGameView extends AbstractView {
-  constructor(state) {
+  constructor(state, playerName) {
     super();
+    this.playerName = playerName;
     this.state = state;
     this.header = new ScreenHeaderView(this.state);
 
@@ -48,6 +49,7 @@ export default class ScreenGameView extends AbstractView {
 
     return `
       <section class="game">
+        ${isDebugMode() ? `<p>Player Name: ${this.playerName}</p>` : ``}
         <p class="game__task">${this.state.game.task}</p>
         <form class="game__content">
         ${optionsTemplate(this.state.game)}

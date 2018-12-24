@@ -1,4 +1,4 @@
-import assert from 'assert';
+import {assert} from 'chai';
 import resizeImg from './../utils/resize-img.js';
 import {tick} from './../utils/tick.js';
 

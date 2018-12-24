@@ -3,8 +3,9 @@ import {tick, resetTimer} from './../utils/tick.js';
 
 
 export default class GameModel {
-  constructor(data) {
+  constructor(data, playerName) {
     this.data = data;
+    this.playerName = playerName;
     this.restart();
     this.setGame(this.data[this.state.level]);
   }
