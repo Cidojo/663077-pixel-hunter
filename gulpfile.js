@@ -20,7 +20,7 @@ const uglify = require(`gulp-uglify`);
 
 
 gulp.task(`style`, () => {
-  return gulp.src(`sass/style.scss`)
+  return gulp.src(`source/sass/style.scss`)
     .pipe(plumber())
     .pipe(sass())
     .pipe(postcss([
@@ -43,7 +43,7 @@ gulp.task(`style`, () => {
 });
 
 gulp.task(`sprite`, () => {
-  return gulp.src(`img/sprite/*.svg`)
+  return gulp.src(`source/img/sprite/*.svg`)
   .pipe(svgstore({
     inlineSvg: true
   }))
@@ -52,7 +52,7 @@ gulp.task(`sprite`, () => {
 });
 
 gulp.task(`scripts`, () => {
-  return gulp.src(`js/main.js`)
+  return gulp.src(`source/js/main.js`)
     .pipe(plumber())
     .pipe(sourcemaps.init())
     .pipe(rollup({
@@ -81,16 +81,16 @@ gulp.task(`imagemin`, [`copy`], () => {
 });
 
 gulp.task(`copy-html`, () => {
-  return gulp.src(`*.{html,ico}`)
+  return gulp.src(`source/*.{html,ico}`)
     .pipe(gulp.dest(`build`))
     .pipe(server.stream());
 });
 
 gulp.task(`copy`, [`copy-html`, `scripts`, `style`, `sprite`], () => {
   return gulp.src([
-    `fonts/**/*.{woff,woff2}`,
-    `img/*.*`
-  ], {base: `.`})
+    `source/fonts/**/*.{woff,woff2}`,
+    `source/img/*.*`
+  ], {base: `source`})
     .pipe(gulp.dest(`build`));
 });
 
@@ -112,13 +112,13 @@ gulp.task(`serve`, [`assemble`], () => {
     ui: false
   });
 
-  gulp.watch(`sass/**/*.{scss,sass}`, [`style`]);
-  gulp.watch(`*.html`).on(`change`, (e) => {
+  gulp.watch(`source/sass/**/*.{scss,sass}`, [`style`]);
+  gulp.watch(`source/*.html`).on(`change`, (e) => {
     if (e.type !== `deleted`) {
       gulp.start(`copy-html`);
     }
   });
-  gulp.watch(`js/**/*.js`, [`js-watch`]);
+  gulp.watch(`source/js/**/*.js`, [`js-watch`]);
 });
 
 gulp.task(`assemble`, [`clean`], () => {
@@ -130,7 +130,7 @@ gulp.task(`build`, [`assemble`], () => {
 });
 
 gulp.task(`test`, () => {
-  return gulp.src([`js/**/*.test.js`])
+  return gulp.src([`source/js/**/*.test.js`])
     .pipe(rollup({
       cache: false,
       plugins: [
@@ -140,4 +140,11 @@ gulp.task(`test`, () => {
     .pipe(mocha({
       reporter: `spec`
     }));
+});
+
+gulp.task(`deploy`, () => {
+  del(`docs`);
+
+  return gulp.src(`build/**/*`, {base: `build`})
+    .pipe(gulp.dest(`docs`));
 });
